@@ -31,7 +31,6 @@ public class BrowseActivity extends AppCompatActivity {
     List<String> channelList;
     List<String> followingList;
 
-
     private int currentItem = 0;
 
     @Override
@@ -54,8 +53,6 @@ public class BrowseActivity extends AppCompatActivity {
         followingList = new ArrayList<String>();
 
         updateGamesList();
-        updateChannelList();
-        updateFollowingList();
 
         browseListView = (ListView) findViewById(R.id.browseListView);
 
@@ -128,15 +125,19 @@ public class BrowseActivity extends AppCompatActivity {
 
             switch(position) {
                 case 0:
+                    updateGamesList();
                     browseListView.setAdapter(mGameAdapter);
                     break;
                 case 1:
+                    updateChannelList();
                     browseListView.setAdapter(mChannelAdapter);
                     break;
                 case 2:
+                    updateFollowingList();
                     browseListView.setAdapter(mFollowingAdapter);
                     break;
                 default:
+                    updateGamesList();
                     browseListView.setAdapter(mGameAdapter);
             }
 
@@ -145,7 +146,7 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private boolean updateGamesList() {
-        if(!gameList.isEmpty()) gameList.clear();
+        gameList.clear();
         gameList.add("Game 1");
         gameList.add("Game 2");
         gameList.add("Game 3");
@@ -154,7 +155,7 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private boolean updateChannelList() {
-        if(!channelList.isEmpty()) channelList.clear();
+        channelList.clear();
         channelList.add("Channel 1");
         channelList.add("Channel 2");
         channelList.add("Channel 3");
@@ -163,7 +164,7 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private boolean updateFollowingList() {
-        if(!followingList.isEmpty()) followingList.clear();
+        followingList.clear();
         followingList.add("Following 1");
         followingList.add("Following 2");
         followingList.add("Following 3");
