@@ -15,21 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseActivity extends AppCompatActivity {
-    private String[] mDrawerArray;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
-    ListView browseListView;
+    private ListView browseListView;
 
-    ArrayAdapter<String> mGameAdapter;
-    ArrayAdapter<String> mChannelAdapter;
-    ArrayAdapter<String> mFollowingAdapter;
+    private ArrayAdapter<String> mGameAdapter;
+    private ArrayAdapter<String> mChannelAdapter;
+    private ArrayAdapter<String> mFollowingAdapter;
 
-    List<String> gameList;
-    List<String> channelList;
-    List<String> followingList;
+    private List<String> gameList;
+    private List<String> channelList;
+    private List<String> followingList;
 
     private int currentItem = 0;
 
@@ -40,14 +37,45 @@ public class BrowseActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mActivityTitle = getTitle().toString();
 
-        addDrawerItems();
         setupDrawer();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        setupBrowseList();
+    }
+
+
+    private void setupDrawer() {
+        /* Add Drawer Items */
+        String[] mDrawerArray = getResources().getStringArray(R.array.drawer_array);
+        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerArray);
+
+        mDrawerList.setAdapter(mAdapter);
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        /* Setup Drawer */
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Navigation");
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(getTitle().toString());
+                invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+    }
+
+    private void setupBrowseList() {
         gameList = new ArrayList<String>();
         channelList = new ArrayList<String>();
         followingList = new ArrayList<String>();
@@ -60,35 +88,6 @@ public class BrowseActivity extends AppCompatActivity {
         mChannelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, channelList);
         mFollowingAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, followingList);
         browseListView.setAdapter(mGameAdapter);
-    }
-
-
-    private void addDrawerItems() {
-        mDrawerArray = getResources().getStringArray(R.array.drawer_array);
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerArray);
-
-        mDrawerList.setAdapter(mAdapter);
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-    }
-
-    private void setupDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation");
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
-                invalidateOptionsMenu();
-            }
-        };
-
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
     private void selectItem(int position) {
