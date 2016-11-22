@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BrowseActivity extends AppCompatActivity {
     private String[] mDrawerArray;
@@ -19,6 +21,18 @@ public class BrowseActivity extends AppCompatActivity {
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
+    ListView browseListView;
+
+    ArrayAdapter<String> mGameAdapter;
+    ArrayAdapter<String> mChannelAdapter;
+    ArrayAdapter<String> mFollowingAdapter;
+
+    List<String> gameList;
+    List<String> channelList;
+    List<String> followingList;
+
+
+    private int currentItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +48,21 @@ public class BrowseActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        gameList = new ArrayList<String>();
+        channelList = new ArrayList<String>();
+        followingList = new ArrayList<String>();
+
+        updateGamesList();
+        updateChannelList();
+        updateFollowingList();
+
+        browseListView = (ListView) findViewById(R.id.browseListView);
+
+        mGameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, gameList);
+        mChannelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, channelList);
+        mFollowingAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, followingList);
+        browseListView.setAdapter(mGameAdapter);
     }
 
 
@@ -94,9 +123,52 @@ public class BrowseActivity extends AppCompatActivity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(BrowseActivity.this, "Item " + position, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(BrowseActivity.this, "Item " + position, Toast.LENGTH_SHORT).show();
+            currentItem = position;
+
+            switch(position) {
+                case 0:
+                    browseListView.setAdapter(mGameAdapter);
+                    break;
+                case 1:
+                    browseListView.setAdapter(mChannelAdapter);
+                    break;
+                case 2:
+                    browseListView.setAdapter(mFollowingAdapter);
+                    break;
+                default:
+                    browseListView.setAdapter(mGameAdapter);
+            }
+
             selectItem(position);
         }
+    }
+
+    private boolean updateGamesList() {
+        if(!gameList.isEmpty()) gameList.clear();
+        gameList.add("Game 1");
+        gameList.add("Game 2");
+        gameList.add("Game 3");
+
+        return true;
+    }
+
+    private boolean updateChannelList() {
+        if(!channelList.isEmpty()) channelList.clear();
+        channelList.add("Channel 1");
+        channelList.add("Channel 2");
+        channelList.add("Channel 3");
+
+        return true;
+    }
+
+    private boolean updateFollowingList() {
+        if(!followingList.isEmpty()) followingList.clear();
+        followingList.add("Following 1");
+        followingList.add("Following 2");
+        followingList.add("Following 3");
+
+        return true;
     }
 
 }
