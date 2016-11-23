@@ -11,22 +11,30 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.mb3364.http.RequestParams;
+import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
+import com.mb3364.twitch.api.models.TopGame;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseActivity extends AppCompatActivity {
+    private Twitch twitch;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView browseListView;
 
-    private ArrayAdapter<String> mGameAdapter;
+    private TopGameAdapter mGameAdapter;
     private ArrayAdapter<String> mChannelAdapter;
     private ArrayAdapter<String> mFollowingAdapter;
 
-    private List<String> gameList;
+    private ArrayList<TopGame> gameList;
     private List<String> channelList;
     private List<String> followingList;
+
+    private static final String TAG = "BrowseActivity";
 
     private int currentItem = 0;
 
@@ -34,6 +42,10 @@ public class BrowseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
+
+        twitch = new Twitch();
+        String apikey = getResources().getString(R.string.apikey);
+        twitch.setClientId(apikey);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -76,17 +88,17 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private void setupBrowseList() {
-        gameList = new ArrayList<String>();
+        gameList = new ArrayList<TopGame>();
         channelList = new ArrayList<String>();
         followingList = new ArrayList<String>();
 
-        updateGamesList();
-
         browseListView = (ListView) findViewById(R.id.browseListView);
 
-        mGameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, gameList);
+        mGameAdapter = new TopGameAdapter(this, gameList);
         mChannelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, channelList);
         mFollowingAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, followingList);
+
+        updateGamesList();
         browseListView.setAdapter(mGameAdapter);
     }
 
@@ -144,13 +156,34 @@ public class BrowseActivity extends AppCompatActivity {
         }
     }
 
-    private boolean updateGamesList() {
-        gameList.clear();
-        gameList.add("Game 1");
-        gameList.add("Game 2");
-        gameList.add("Game 3");
+    private void updateGamesList() {
 
-        return true;
+        RequestParams params = new RequestParams();
+        params.put("limit", 5);
+
+        twitch.games().getTop(params, new TopGamesResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, List<TopGame> topGames) {
+                /* Successful response from the Twitch API */
+                gameList.clear();
+
+                for (TopGame topGame : topGames) {
+                    gameList.add(topGame);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String statusMessage, String errorMessage) {
+                /* Twitch API responded with an error message */
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                /* Unable to access Twitch, or error parsing the response */
+            }
+
+        });
+        mGameAdapter.notifyDataSetChanged();
     }
 
     private boolean updateChannelList() {
