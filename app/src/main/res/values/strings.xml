@@ -17,4 +17,6 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="topgame_logo">This is the game logo.</string>
 </resources>
