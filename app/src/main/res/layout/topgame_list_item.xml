@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--ImageView
+        android:id="@+id/image_gamelogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/topgame_logo" /-->
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/game_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/topgame_viewers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+</LinearLayout>
