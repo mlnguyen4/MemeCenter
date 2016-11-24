@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class TopGameAdapter extends ArrayAdapter<TopGame> {
     private Activity mContext;
-    private ArrayList<TopGame> mItems;
 
     private static class ViewHolder {
         TextView tv_name;
@@ -23,23 +22,7 @@ public class TopGameAdapter extends ArrayAdapter<TopGame> {
 
     public TopGameAdapter(Activity context, ArrayList<TopGame> items) {
         super(context, R.layout.topgame_list_item, items);
-        mItems = items;
         mContext = context;
-    }
-
-    @Override
-    public int getCount() {
-        return mItems.size();
-    }
-
-    @Override
-    public TopGame getItem(int position) {
-        return mItems.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @Override
@@ -70,11 +53,5 @@ public class TopGameAdapter extends ArrayAdapter<TopGame> {
 
 
         return convertView;
-    }
-
-    public void update(ArrayList<TopGame> topGames) {
-        mItems.clear();
-        mItems.addAll(topGames);
-        notifyDataSetChanged();
     }
 }
