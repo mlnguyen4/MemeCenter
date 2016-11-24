@@ -161,7 +161,7 @@ public class BrowseActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("limit", 5);
 
-        twitch.games().getTop(params, new TopGamesResponseHandler() {
+        TopGamesResponseHandler topGamesResponseHandler = new TopGamesResponseHandler() {
             @Override
             public void onSuccess(int statusCode, List<TopGame> topGames) {
                 /* Successful response from the Twitch API */
@@ -170,6 +170,12 @@ public class BrowseActivity extends AppCompatActivity {
                 for (TopGame topGame : topGames) {
                     gameList.add(topGame);
                 }
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mGameAdapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override
@@ -182,7 +188,9 @@ public class BrowseActivity extends AppCompatActivity {
                 /* Unable to access Twitch, or error parsing the response */
             }
 
-        });
+        };
+
+        twitch.games().getTop(params, topGamesResponseHandler);
         mGameAdapter.notifyDataSetChanged();
     }
 
