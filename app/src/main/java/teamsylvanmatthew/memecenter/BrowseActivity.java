@@ -13,7 +13,9 @@ import android.widget.ListView;
 
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
 import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
+import com.mb3364.twitch.api.models.Stream;
 import com.mb3364.twitch.api.models.TopGame;
 
 import java.util.ArrayList;
@@ -27,11 +29,11 @@ public class BrowseActivity extends AppCompatActivity {
     private ListView browseListView;
 
     private TopGameAdapter mGameAdapter;
-    private ArrayAdapter<String> mChannelAdapter;
+    private StreamAdapter mStreamAdapter;
     private ArrayAdapter<String> mFollowingAdapter;
 
     private ArrayList<TopGame> gameList;
-    private List<String> channelList;
+    private ArrayList<Stream> streamList;
     private List<String> followingList;
 
     private static final String TAG = "BrowseActivity";
@@ -89,13 +91,13 @@ public class BrowseActivity extends AppCompatActivity {
 
     private void setupBrowseList() {
         gameList = new ArrayList<TopGame>();
-        channelList = new ArrayList<String>();
+        streamList = new ArrayList<Stream>();
         followingList = new ArrayList<String>();
 
         browseListView = (ListView) findViewById(R.id.browseListView);
 
         mGameAdapter = new TopGameAdapter(this, gameList);
-        mChannelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, channelList);
+        mStreamAdapter = new StreamAdapter(this, streamList);
         mFollowingAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, followingList);
 
         updateGamesList();
@@ -140,8 +142,8 @@ public class BrowseActivity extends AppCompatActivity {
                     browseListView.setAdapter(mGameAdapter);
                     break;
                 case 1:
-                    updateChannelList();
-                    browseListView.setAdapter(mChannelAdapter);
+                    updateStreamList();
+                    browseListView.setAdapter(mStreamAdapter);
                     break;
                 case 2:
                     updateFollowingList();
@@ -187,20 +189,48 @@ public class BrowseActivity extends AppCompatActivity {
             public void onFailure(Throwable e) {
                 /* Unable to access Twitch, or error parsing the response */
             }
-
         };
 
         twitch.games().getTop(params, topGamesResponseHandler);
         mGameAdapter.notifyDataSetChanged();
     }
 
-    private boolean updateChannelList() {
-        channelList.clear();
-        channelList.add("Channel 1");
-        channelList.add("Channel 2");
-        channelList.add("Channel 3");
+    private void updateStreamList() {
 
-        return true;
+        RequestParams params = new RequestParams();
+        params.put("limit", 5);
+
+        StreamsResponseHandler streamsResponseHandler = new StreamsResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, List<Stream> streams) {
+                /* Successful response from the Twitch API */
+                streamList.clear();
+
+                for (Stream stream : streams) {
+                    streamList.add(stream);
+                }
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mStreamAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int statusCode, String statusMessage, String errorMessage) {
+                /* Twitch API responded with an error message */
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                /* Unable to access Twitch, or error parsing the response */
+            }
+
+        };
+
+        twitch.streams().get(params, streamsResponseHandler);
+        mStreamAdapter.notifyDataSetChanged();
     }
 
     private boolean updateFollowingList() {
