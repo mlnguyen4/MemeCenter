@@ -1,5 +1,6 @@
 package teamsylvanmatthew.memecenter;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.mb3364.http.RequestParams;
@@ -22,22 +25,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseActivity extends AppCompatActivity {
+    private static final String TAG = "BrowseActivity";
     private Twitch twitch;
     private DrawerLayout mDrawerLayout;
+    private LinearLayout mDrawerLinear;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView browseListView;
-
     private TopGameAdapter mGameAdapter;
     private StreamAdapter mStreamAdapter;
     private ArrayAdapter<String> mFollowingAdapter;
-
     private ArrayList<TopGame> gameList;
     private ArrayList<Stream> streamList;
     private List<String> followingList;
-
-    private static final String TAG = "BrowseActivity";
-
     private int currentItem = 0;
 
     @Override
@@ -50,7 +50,7 @@ public class BrowseActivity extends AppCompatActivity {
         twitch.setClientId(apikey);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.drawer_list);
 
         setupDrawer();
 
@@ -68,6 +68,8 @@ public class BrowseActivity extends AppCompatActivity {
 
         mDrawerList.setAdapter(mAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerLinear = (LinearLayout) findViewById(R.id.left_drawer);
 
         /* Setup Drawer */
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
@@ -87,6 +89,15 @@ public class BrowseActivity extends AppCompatActivity {
 
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        Button loginButton = (Button) findViewById(R.id.login_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent loginIntent = new Intent(BrowseActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+            }
+        });
     }
 
     private void setupBrowseList() {
@@ -106,7 +117,7 @@ public class BrowseActivity extends AppCompatActivity {
 
     private void selectItem(int position) {
         mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(mDrawerLinear);
     }
 
     @Override
@@ -128,34 +139,6 @@ public class BrowseActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //Toast.makeText(BrowseActivity.this, "Item " + position, Toast.LENGTH_SHORT).show();
-            currentItem = position;
-
-            switch(position) {
-                case 0:
-                    updateGamesList();
-                    browseListView.setAdapter(mGameAdapter);
-                    break;
-                case 1:
-                    updateStreamList();
-                    browseListView.setAdapter(mStreamAdapter);
-                    break;
-                case 2:
-                    updateFollowingList();
-                    browseListView.setAdapter(mFollowingAdapter);
-                    break;
-                default:
-                    updateGamesList();
-                    browseListView.setAdapter(mGameAdapter);
-            }
-
-            selectItem(position);
-        }
     }
 
     private void updateGamesList() {
@@ -240,6 +223,34 @@ public class BrowseActivity extends AppCompatActivity {
         followingList.add("Following 3");
 
         return true;
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //Toast.makeText(BrowseActivity.this, "Item " + position, Toast.LENGTH_SHORT).show();
+            currentItem = position;
+
+            switch (position) {
+                case 0:
+                    updateGamesList();
+                    browseListView.setAdapter(mGameAdapter);
+                    break;
+                case 1:
+                    updateStreamList();
+                    browseListView.setAdapter(mStreamAdapter);
+                    break;
+                case 2:
+                    updateFollowingList();
+                    browseListView.setAdapter(mFollowingAdapter);
+                    break;
+                default:
+                    updateGamesList();
+                    browseListView.setAdapter(mGameAdapter);
+            }
+
+            selectItem(position);
+        }
     }
 
 }
