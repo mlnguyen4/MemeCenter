@@ -56,6 +56,11 @@ public class BrowseActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         setupBrowseList();
     }
@@ -175,7 +180,6 @@ public class BrowseActivity extends AppCompatActivity {
         };
 
         twitch.games().getTop(params, topGamesResponseHandler);
-        mGameAdapter.notifyDataSetChanged();
     }
 
     private void updateStreamList() {
@@ -213,7 +217,6 @@ public class BrowseActivity extends AppCompatActivity {
         };
 
         twitch.streams().get(params, streamsResponseHandler);
-        mStreamAdapter.notifyDataSetChanged();
     }
 
     private boolean updateFollowingList() {
