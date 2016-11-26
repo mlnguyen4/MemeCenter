@@ -7,11 +7,11 @@
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <TextView
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:text="Header"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@android:color/white" />
+        android:drawableLeft="@drawable/ic_account_circle_black"
+        android:text="@string/drawer_login" />
 
 </LinearLayout>

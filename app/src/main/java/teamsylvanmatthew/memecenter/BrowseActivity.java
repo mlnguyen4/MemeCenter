@@ -1,5 +1,6 @@
 package teamsylvanmatthew.memecenter;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class BrowseActivity extends AppCompatActivity {
     private static final String TAG = "BrowseActivity";
@@ -58,6 +61,15 @@ public class BrowseActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 selectDrawerItem(menuItem);
                 return true;
+            }
+        });
+
+        Button loginButton = (Button) navigationView.getHeaderView(0).findViewById(R.id.login_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent loginIntent = new Intent(BrowseActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
             }
         });
     }
