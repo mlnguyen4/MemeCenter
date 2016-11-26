@@ -23,8 +23,14 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".ChatActivity">
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".BrowseActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BrowseActivity" />
+        </activity>
+        <activity android:name=".ChatActivity"
+            android:parentActivityName=".BrowseActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".BrowseActivity" />
