@@ -3,6 +3,7 @@ package teamsylvanmatthew.memecenter;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
@@ -43,7 +45,26 @@ public class BrowseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse);
+
+        RelativeLayout loadingRelativeLayout = (RelativeLayout) findViewById(R.id.loading_panel);
+        if (loadingRelativeLayout != null) {
+
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            LoadingFragment loadingFragment = new LoadingFragment();
+            loadingFragment.setArguments(getIntent().getExtras());
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().add(R.id.loading_panel, loadingFragment).commit();
+
+            setContentView(R.layout.loading_overlay);
+        } else {
+            setContentView(R.layout.activity_browse);
+        }
+
+
 
         twitch = new Twitch();
         String apikey = getResources().getString(R.string.apikey);
