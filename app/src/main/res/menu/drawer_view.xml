@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
+            android:id="@+id/nav_game"
             android:checked="true"
             android:icon="@drawable/ic_gamepad_black"
-            android:title="Games" />
+            android:title="@string/drawer_game" />
         <item
-            android:id="@+id/nav_second_fragment"
+            android:id="@+id/nav_stream"
             android:icon="@drawable/ic_voice_chat_black"
-            android:title="Channel" />
+            android:title="@string/drawer_stream" />
         <item
-            android:id="@+id/nav_third_fragment"
+            android:id="@+id/nav_follow"
             android:icon="@drawable/ic_group_black"
-            android:title="Following" />
+            android:title="@string/drawer_follower" />
     </group>
 </menu>
