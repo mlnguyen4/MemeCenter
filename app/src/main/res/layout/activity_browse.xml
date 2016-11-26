@@ -32,7 +32,7 @@
             android:id="@+id/login_button"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_account_circle"
+            android:drawableLeft="@drawable/ic_account_circle_black"
             android:text="Login" />
 
         <ListView
