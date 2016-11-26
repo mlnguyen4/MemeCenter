@@ -256,4 +256,15 @@ public class BrowseActivity extends AppCompatActivity {
         }
     }
 
+    private class StreamItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            Intent chatIntent = new Intent(BrowseActivity.this, ChatActivity.class);
+            startActivity(chatIntent);
+
+            selectItem(position);
+        }
+    }
+
 }
