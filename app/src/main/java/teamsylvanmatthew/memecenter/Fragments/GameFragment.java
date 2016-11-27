@@ -37,7 +37,7 @@ public class GameFragment extends Fragment {
         mActivity = getActivity();
 
         twitch = new Twitch();
-        String apikey = getResources().getString(R.string.apikey);
+        String apikey = getResources().getString(R.string.clientid);
         twitch.setClientId(apikey);
 
         gameListView = (ListView) mView.findViewById(R.id.game_listview);

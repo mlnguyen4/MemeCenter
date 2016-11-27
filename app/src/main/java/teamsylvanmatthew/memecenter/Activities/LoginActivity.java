@@ -2,8 +2,8 @@ package teamsylvanmatthew.memecenter.Activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -99,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(loginIntent);
                 }
             }
+
 
         });
         webview.loadUrl(twitchLoginPageUrl);
