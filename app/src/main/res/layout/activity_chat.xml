@@ -43,7 +43,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginBottom="0dp"
             android:layout_weight="1"
-            android:background="@drawable/ic_send_black" />
+            android:background="@drawable/ic_gamepad_black" />
     </LinearLayout>
 
 </LinearLayout>

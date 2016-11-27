@@ -1,5 +1,6 @@
 package teamsylvanmatthew.memecenter.Activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ public class TwitchAuthenticationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_twitch_authentication);
 
         twitchAuthenticationWebView();
-        
+
     }
 
 
@@ -40,7 +41,7 @@ public class TwitchAuthenticationActivity extends AppCompatActivity {
     {
         WebView webview = new WebView(this);
         setContentView(webview);
-        Twitch twitch = new Twitch();
+
         String clientID = getResources().getString(R.string.clientid);
         String redirectUrl = getResources().getString(R.string.redirecturl);
         //The list of permissions we are asking Twitch for about the user
@@ -94,11 +95,13 @@ public class TwitchAuthenticationActivity extends AppCompatActivity {
 
                     Twitch twitch = new Twitch();
                     String clientID = getResources().getString(R.string.clientid);
-                    twitch.setClientId(clientID); // This is your registered application's client ID
+                    twitch.setClientId(clientID); // registered application's client ID
                     twitch.auth().setAccessToken(code);
 
-                    //TODO: Send authenticated Twitch object to where ever Sylvan wants it
+                    //Send authenticated Twitch object to where ever Sylvan wants it
                     //from this line onwards
+                    Intent loginIntent = new Intent(TwitchAuthenticationActivity.this, BrowseActivity.class);
+                    startActivity(loginIntent);
                 }
             }
 
