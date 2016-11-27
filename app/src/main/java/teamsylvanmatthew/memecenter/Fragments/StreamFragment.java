@@ -32,13 +32,14 @@ public class StreamFragment extends Fragment {
     private ArrayList<Stream> streamList;
     private ListView streamListView;
 
+    //params.put("offset", 50);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_stream, container, false);
         mActivity = getActivity();
 
         twitch = new Twitch();
-        String apikey = getResources().getString(R.string.apikey);
+        String apikey = getResources().getString(R.string.clientid);
         twitch.setClientId(apikey);
 
         streamListView = (ListView) mView.findViewById(R.id.stream_listview);
@@ -56,6 +57,7 @@ public class StreamFragment extends Fragment {
         streamListView.setOnItemClickListener(new StreamItemClickListener());
     }
 
+    //game resource.java
     private void updateStreamList() {
 
         RequestParams params = new RequestParams();
