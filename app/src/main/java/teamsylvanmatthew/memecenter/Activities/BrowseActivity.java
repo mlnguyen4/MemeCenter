@@ -64,7 +64,7 @@ public class BrowseActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent loginIntent = new Intent(BrowseActivity.this, TwitchAuthenticationActivity.class);
+                Intent loginIntent = new Intent(BrowseActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
             }
         });
