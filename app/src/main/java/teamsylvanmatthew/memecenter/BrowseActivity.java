@@ -10,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,6 @@ public class BrowseActivity extends AppCompatActivity {
     private static final String TAG = "BrowseActivity";
 
     private DrawerLayout mDrawerLayout;
-    private Toolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -28,26 +26,19 @@ public class BrowseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-
         mDrawerToggle = setupDrawerToggle();
         navigationView = (NavigationView) findViewById(R.id.navigation);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         setupDrawer(navigationView);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -72,6 +63,9 @@ public class BrowseActivity extends AppCompatActivity {
                 startActivity(loginIntent);
             }
         });
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
@@ -117,7 +111,7 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
     }
 
     @Override
