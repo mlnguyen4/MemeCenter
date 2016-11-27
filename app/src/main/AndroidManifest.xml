@@ -36,6 +36,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.BrowseActivity" />
         </activity>
+        <activity android:name=".Activities.TwitchAuthenticationActivity"></activity>
     </application>
 
 </manifest>
