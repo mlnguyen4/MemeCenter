@@ -28,7 +28,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.BrowseActivity" />
         </activity>
-        <activity android:name=".Activities.LoginActivity"></activity>
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:parentActivityName=".Activities.BrowseActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.BrowseActivity" />
+        </activity>
     </application>
 
 </manifest>
