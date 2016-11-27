@@ -11,7 +11,8 @@
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="25" />
+        android:layout_weight="25"
+        android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
         android:id="@+id/composeLayout"
@@ -23,7 +24,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/messageText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
@@ -34,7 +35,7 @@
             android:inputType="text" />
 
         <Button
-            android:id="@+id/sendMessage"
+            android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
