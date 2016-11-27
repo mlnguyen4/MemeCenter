@@ -27,26 +27,7 @@ public class TwitchAuthenticationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_twitch_authentication);
 
         twitchAuthenticationWebView();
-
-        /* Get the authentication URL. Note: you will set the required scopes needed here. */
-        //String authUrl = twitch.auth().getAuthenticationUrl(clientID, callbackUri, Scopes.USER_READ, Scopes.CHANNEL_READ);
-
-        /* Send the user to the webpage somehow so that they can authorize your application */
-        //openWebpage(authUrl); change to redirect to browseActivity
-
-        /* Waits for the user to authorize or deny your application. Note: this function will block until a response is received! */
-       // boolean authSuccess = twitch.auth().awaitAccessToken();
-
-
-        /* Check if authentication was successful */
-        //if (authSuccess) { //use authSuccess instead of true
-            /* The access token is automatically set in the Twitch object and will be sent with all further API requests! */
-        //    String accessToken = twitch.auth().getAccessToken(); // if we want to explicitly get it for some reason
-        //    System.out.println("Access Token: " + accessToken);
-        //} else {
-            /* Authentication failed, most likely because the user denied the authorization request */
-        //    System.out.println(twitch.auth().getAuthenticationError());
-        //}
+        
     }
 
 
