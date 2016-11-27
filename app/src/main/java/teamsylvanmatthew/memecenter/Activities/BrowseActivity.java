@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.mb3364.twitch.api.Twitch;
+
 import teamsylvanmatthew.memecenter.Fragments.GameFragment;
 import teamsylvanmatthew.memecenter.Fragments.LoadingFragment;
 import teamsylvanmatthew.memecenter.Fragments.StreamFragment;
@@ -21,6 +23,8 @@ import teamsylvanmatthew.memecenter.R;
 
 public class BrowseActivity extends AppCompatActivity {
     private static final String TAG = "BrowseActivity";
+
+    public Twitch twitch;
 
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
@@ -35,6 +39,10 @@ public class BrowseActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle = setupDrawerToggle();
         navigationView = (NavigationView) findViewById(R.id.navigation);
+
+        twitch = new Twitch();
+        String apikey = getResources().getString(R.string.clientid);
+        twitch.setClientId(apikey);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
