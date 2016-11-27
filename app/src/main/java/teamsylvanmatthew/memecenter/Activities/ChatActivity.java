@@ -17,4 +17,9 @@ public class ChatActivity extends AppCompatActivity {
         String title = new String("Chat: " + intent.getStringExtra("channel"));
         setTitle(title);
     }
+
+    private boolean postMessage(String msg, int gravity) {
+
+        return true;
+    }
 }
