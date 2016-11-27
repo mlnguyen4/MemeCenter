@@ -2,12 +2,14 @@ package teamsylvanmatthew.memecenter;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.mb3364.http.RequestParams;
@@ -21,23 +23,24 @@ import java.util.List;
 public class StreamFragment extends Fragment {
     private Twitch twitch;
     private Activity mActivity;
+    private View mView;
     private StreamAdapter mStreamAdapter;
     private ArrayList<Stream> streamList;
     private ListView streamListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View fragmentLayout = inflater.inflate(R.layout.fragment_stream, container, false);
+        mView = inflater.inflate(R.layout.fragment_stream, container, false);
         mActivity = getActivity();
 
         twitch = new Twitch();
         String apikey = getResources().getString(R.string.apikey);
         twitch.setClientId(apikey);
 
-        streamListView = (ListView) fragmentLayout.findViewById(R.id.stream_listview);
+        streamListView = (ListView) mView.findViewById(R.id.stream_listview);
         setupStreamList();
 
-        return fragmentLayout;
+        return mView;
     }
 
     private void setupStreamList() {
@@ -46,6 +49,7 @@ public class StreamFragment extends Fragment {
 
         updateStreamList();
         streamListView.setAdapter(mStreamAdapter);
+        streamListView.setOnItemClickListener(new StreamItemClickListener());
     }
 
     private void updateStreamList() {
@@ -90,5 +94,14 @@ public class StreamFragment extends Fragment {
         };
 
         twitch.streams().get(params, streamsResponseHandler);
+    }
+
+    private class StreamItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent chatIntent = new Intent(mActivity, ChatActivity.class);
+            chatIntent.putExtra("channel", streamList.get(position).getChannel().getName());
+            startActivity(chatIntent);
+        }
     }
 }

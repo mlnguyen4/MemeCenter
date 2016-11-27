@@ -8,7 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
@@ -21,23 +23,24 @@ import java.util.List;
 public class GameFragment extends Fragment {
     private Twitch twitch;
     private Activity mActivity;
+    private View mView;
     private ArrayList<TopGame> gameList;
     private TopGameAdapter mGameAdapter;
     private ListView gameListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View fragmentLayout = inflater.inflate(R.layout.fragment_game, container, false);
+        mView = inflater.inflate(R.layout.fragment_game, container, false);
         mActivity = getActivity();
 
         twitch = new Twitch();
         String apikey = getResources().getString(R.string.apikey);
         twitch.setClientId(apikey);
 
-        gameListView = (ListView) fragmentLayout.findViewById(R.id.game_listview);
+        gameListView = (ListView) mView.findViewById(R.id.game_listview);
         setupGameList();
 
-        return fragmentLayout;
+        return mView;
     }
 
     private void setupGameList() {
@@ -46,6 +49,7 @@ public class GameFragment extends Fragment {
 
         updateGameList();
         gameListView.setAdapter(mGameAdapter);
+        gameListView.setOnItemClickListener(new GameFragment.GameItemClickListener());
     }
 
     private void updateGameList() {
@@ -89,5 +93,13 @@ public class GameFragment extends Fragment {
         };
 
         twitch.games().getTop(params, topGamesResponseHandler);
+    }
+
+    private class GameItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Toast.makeText(mActivity, "Item " + position, Toast.LENGTH_SHORT).show();
+
+        }
     }
 }
