@@ -1,4 +1,4 @@
-package teamsylvanmatthew.memecenter;
+package teamsylvanmatthew.memecenter.Activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,6 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import teamsylvanmatthew.memecenter.Fragments.GameFragment;
+import teamsylvanmatthew.memecenter.Fragments.LoadingFragment;
+import teamsylvanmatthew.memecenter.Fragments.StreamFragment;
+import teamsylvanmatthew.memecenter.R;
 
 public class BrowseActivity extends AppCompatActivity {
     private static final String TAG = "BrowseActivity";

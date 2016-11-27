@@ -1,4 +1,4 @@
-package teamsylvanmatthew.memecenter;
+package teamsylvanmatthew.memecenter.Adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -12,16 +12,11 @@ import com.mb3364.twitch.api.models.Stream;
 
 import java.util.ArrayList;
 
+import teamsylvanmatthew.memecenter.R;
+
 
 public class StreamAdapter extends ArrayAdapter<Stream> {
     private Activity mContext;
-
-    private static class ViewHolder {
-        TextView tv_name;
-        TextView tv_game;
-        TextView tv_viewers;
-        TextView tv_title;
-    }
 
     public StreamAdapter(Activity context, ArrayList<Stream> items) {
         super(context, R.layout.stream_list_item, items);
@@ -57,6 +52,13 @@ public class StreamAdapter extends ArrayAdapter<Stream> {
         viewHolder.tv_title.setText("Title: " + channel.getStatus());
 
         return convertView;
+    }
+
+    private static class ViewHolder {
+        TextView tv_name;
+        TextView tv_game;
+        TextView tv_viewers;
+        TextView tv_title;
     }
 }
 

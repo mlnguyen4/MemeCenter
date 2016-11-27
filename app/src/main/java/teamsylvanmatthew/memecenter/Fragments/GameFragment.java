@@ -1,4 +1,4 @@
-package teamsylvanmatthew.memecenter;
+package teamsylvanmatthew.memecenter.Fragments;
 
 
 import android.app.Activity;
@@ -19,6 +19,9 @@ import com.mb3364.twitch.api.models.TopGame;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import teamsylvanmatthew.memecenter.Adapters.TopGameAdapter;
+import teamsylvanmatthew.memecenter.R;
 
 public class GameFragment extends Fragment {
     private Twitch twitch;

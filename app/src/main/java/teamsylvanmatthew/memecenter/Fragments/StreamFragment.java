@@ -1,4 +1,4 @@
-package teamsylvanmatthew.memecenter;
+package teamsylvanmatthew.memecenter.Fragments;
 
 
 import android.app.Activity;
@@ -19,6 +19,10 @@ import com.mb3364.twitch.api.models.Stream;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import teamsylvanmatthew.memecenter.Activities.ChatActivity;
+import teamsylvanmatthew.memecenter.Adapters.StreamAdapter;
+import teamsylvanmatthew.memecenter.R;
 
 public class StreamFragment extends Fragment {
     private Twitch twitch;

@@ -1,4 +1,4 @@
-package teamsylvanmatthew.memecenter;
+package teamsylvanmatthew.memecenter.Adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -12,13 +12,10 @@ import com.mb3364.twitch.api.models.TopGame;
 
 import java.util.ArrayList;
 
+import teamsylvanmatthew.memecenter.R;
+
 public class TopGameAdapter extends ArrayAdapter<TopGame> {
     private Activity mContext;
-
-    private static class ViewHolder {
-        TextView tv_name;
-        TextView tv_viewers;
-    }
 
     public TopGameAdapter(Activity context, ArrayList<TopGame> items) {
         super(context, R.layout.topgame_list_item, items);
@@ -53,5 +50,10 @@ public class TopGameAdapter extends ArrayAdapter<TopGame> {
 
 
         return convertView;
+    }
+
+    private static class ViewHolder {
+        TextView tv_name;
+        TextView tv_viewers;
     }
 }
