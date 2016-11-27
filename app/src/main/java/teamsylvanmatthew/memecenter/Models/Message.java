@@ -11,19 +11,19 @@ public class Message {
         this.mMessage = mMessage;
     }
 
-    public String getmUser() {
+    public String getUser() {
         return mUser;
     }
 
-    public void setmUser(String mUser) {
+    public void setUser(String mUser) {
         this.mUser = mUser;
     }
 
-    public String getmMessage() {
+    public String getMessage() {
         return mMessage;
     }
 
-    public void setmMessage(String mMessage) {
+    public void setMessage(String mMessage) {
         this.mMessage = mMessage;
     }
 }
