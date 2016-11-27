@@ -20,7 +20,7 @@ import com.mb3364.twitch.api.models.Stream;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import teamsylvanmatthew.memecenter.Activities.ChatActivity;
 import teamsylvanmatthew.memecenter.Adapters.StreamAdapter;
 import teamsylvanmatthew.memecenter.R;
 
@@ -103,9 +103,9 @@ public class StreamFragment extends Fragment {
     private class StreamItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //Intent chatIntent = new Intent(mActivity, ChatActivity.class);
-            //chatIntent.putExtra("channel", streamList.get(position).getChannel().getName());
-            //startActivity(chatIntent);
+            Intent chatIntent = new Intent(mActivity, ChatActivity.class);
+            chatIntent.putExtra("channel", streamList.get(position).getChannel().getName());
+            startActivity(chatIntent);
         }
     }
 }
