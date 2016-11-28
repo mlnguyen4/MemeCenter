@@ -9,9 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.pircbotx.Configuration;
+import org.pircbotx.PircBotX;
+
 import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.Adapters.MessageAdapter;
+import teamsylvanmatthew.memecenter.Listeners.ChatListener;
 import teamsylvanmatthew.memecenter.Models.Message;
 import teamsylvanmatthew.memecenter.R;
 
@@ -20,6 +24,7 @@ public class ChatActivity extends AppCompatActivity {
     private ListView messageListView;
     private ArrayList<Message> messages;
     private MessageAdapter messageAdapter;
+    private PircBotX bot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,28 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Configuration.Builder builder = new Configuration.Builder();
+                    builder.addServer("irc.freenode.net");
+                    builder.setName(mCurrentUser);
+                    builder.addAutoJoinChannel("#memecenter");
+                    //builder.setServerPassword(authcode);
+                    builder.setMessageDelay(0);
+                    builder.addListener(new ChatListener());
+                    builder.setAutoReconnect(false);
+                    builder.setAutoSplitMessage(false);
+
+                    bot = new PircBotX(builder.buildConfiguration());
+                    bot.startBot();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }).start();
+
+
     }
 
     @Override
@@ -63,4 +90,11 @@ public class ChatActivity extends AppCompatActivity {
         messageAdapter.notifyDataSetChanged();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        bot.close();
+    }
+
 }
