@@ -33,11 +33,8 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             viewHolder = new MessageAdapter.ViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            if (mCurrentUser == message.getUser()) {
-                convertView = inflater.inflate(R.layout.left_msg_list_item, null);
-            } else {
-                convertView = inflater.inflate(R.layout.right_msg_list_item, null);
-            }
+            convertView = inflater.inflate(R.layout.right_msg_list_item, null);
+
 
             viewHolder.tv_user = (TextView) convertView.findViewById(R.id.editTextName);
             viewHolder.tv_msg = (TextView) convertView.findViewById(R.id.editTextMsg);

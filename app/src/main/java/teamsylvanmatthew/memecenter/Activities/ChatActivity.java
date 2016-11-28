@@ -11,11 +11,12 @@ import android.widget.ListView;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.Adapters.MessageAdapter;
-import teamsylvanmatthew.memecenter.Listeners.ChatListener;
 import teamsylvanmatthew.memecenter.Models.Message;
 import teamsylvanmatthew.memecenter.R;
 
@@ -60,9 +61,19 @@ public class ChatActivity extends AppCompatActivity {
                     builder.addAutoJoinChannel("#memecenter");
                     //builder.setServerPassword(authcode);
                     builder.setMessageDelay(0);
-                    builder.addListener(new ChatListener());
+                    //builder.addListener(new ChatListener());
                     builder.setAutoReconnect(false);
                     builder.setAutoSplitMessage(false);
+
+                    builder.addListener(new ListenerAdapter() {
+                        @Override
+                        public void onGenericMessage(final GenericMessageEvent event) throws Exception {
+                            postMessage(new Message(event.getUser().getNick(), event.getMessage()));
+                            event.respond("recieved");
+                        }
+
+                    });
+
 
                     bot = new PircBotX(builder.buildConfiguration());
                     bot.startBot();
@@ -87,7 +98,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private boolean postMessage(Message msg) {
         messages.add(msg);
-        messageAdapter.notifyDataSetChanged();
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                messageAdapter.notifyDataSetChanged();
+            }
+        });
         return true;
     }
 
