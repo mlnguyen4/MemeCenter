@@ -47,7 +47,10 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText msgText = (EditText) findViewById(R.id.messageText);
-                postMessage(new Message(mCurrentUser, msgText.getText().toString()));
+                if (!msgText.equals("")) {
+                    postMessage(new Message(mCurrentUser, msgText.getText().toString()));
+                    msgText.setText("");
+                }
             }
         });
 
@@ -97,13 +100,17 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private boolean postMessage(Message msg) {
-        messages.add(msg);
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                messageAdapter.notifyDataSetChanged();
-            }
-        });
-        return true;
+        if (!msg.getMessage().equals("")) {
+            messages.add(msg);
+            this.runOnUiThread(new Runnable() {
+                public void run() {
+                    messageAdapter.notifyDataSetChanged();
+                }
+            });
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
