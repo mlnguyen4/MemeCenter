@@ -4,14 +4,11 @@
     android:layout_height="match_parent"
     tools:context="teamsylvanmatthew.memecenter.Fragments.LoadingFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/stream_listview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+    <ListView
+        android:id="@+id/stream_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 </FrameLayout>

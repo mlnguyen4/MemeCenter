@@ -54,6 +54,7 @@ public class StreamAdapter extends ArrayAdapter<Stream> {
         return convertView;
     }
 
+
     private static class ViewHolder {
         TextView tv_name;
         TextView tv_game;

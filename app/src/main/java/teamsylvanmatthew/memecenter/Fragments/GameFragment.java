@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -19,11 +20,14 @@ import com.mb3364.twitch.api.models.TopGame;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import teamsylvanmatthew.memecenter.Adapters.TopGameAdapter;
 import teamsylvanmatthew.memecenter.R;
 
 public class GameFragment extends Fragment {
+    private static int limit = 0;
+    private static int offset = 100;
     private Twitch twitch;
     private Activity mActivity;
     private View mView;
@@ -37,7 +41,7 @@ public class GameFragment extends Fragment {
         mActivity = getActivity();
 
         twitch = new Twitch();
-        String apikey = getResources().getString(R.string.clientid);
+        String apikey = getResources().getString(R.string.apikey);
         twitch.setClientId(apikey);
 
         gameListView = (ListView) mView.findViewById(R.id.game_listview);
@@ -50,6 +54,10 @@ public class GameFragment extends Fragment {
         gameList = new ArrayList<TopGame>();
         mGameAdapter = new TopGameAdapter(mActivity, gameList);
 
+        //incase user has scrolled, left to different activity and came back
+        //prevents overflow
+        limit = 0;
+
         updateGameList();
         gameListView.setAdapter(mGameAdapter);
         gameListView.setOnItemClickListener(new GameFragment.GameItemClickListener());
@@ -58,7 +66,8 @@ public class GameFragment extends Fragment {
     private void updateGameList() {
 
         RequestParams params = new RequestParams();
-        params.put("limit", 5);
+        limit += 15;
+        params.put("limit", limit);
 
         TopGamesResponseHandler topGamesResponseHandler = new TopGamesResponseHandler() {
             @Override
@@ -80,6 +89,24 @@ public class GameFragment extends Fragment {
                         if (loadingFragment != null) {
                             fragmentManager.beginTransaction().remove(loadingFragment).commit();
                         }
+                        gameListView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                            int items = offset;
+
+                            @Override
+                            public void onScrollChanged() {
+                                if (gameListView.getLastVisiblePosition() == gameListView.getAdapter().getCount() - 1 && gameListView.getChildAt(gameListView.getChildCount() - 1).getBottom() <= gameListView.getHeight()) {
+                                    if (gameListView.getAdapter().getCount() < 90) {
+                                        updateGameList();
+                                        try {
+                                            TimeUnit.SECONDS.sleep(1);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+
+                        });
                     }
                 });
             }
