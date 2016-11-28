@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.mb3364.http.RequestParams;
-import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
 import com.mb3364.twitch.api.models.Stream;
 
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import teamsylvanmatthew.memecenter.Activities.BrowseActivity;
 import teamsylvanmatthew.memecenter.Activities.ChatActivity;
 import teamsylvanmatthew.memecenter.Adapters.StreamAdapter;
 import teamsylvanmatthew.memecenter.R;
@@ -29,7 +29,7 @@ import teamsylvanmatthew.memecenter.R;
 public class StreamFragment extends Fragment {
     private static int limit = 0;
     private static int offset = 100;
-    private Twitch twitch;
+    private BrowseActivity browseActivity;
     private Activity mActivity;
     private View mView;
     private StreamAdapter mStreamAdapter;
@@ -44,9 +44,7 @@ public class StreamFragment extends Fragment {
 
         mActivity = getActivity();
 
-        twitch = new Twitch();
-        String apikey = getResources().getString(R.string.clientid);
-        twitch.setClientId(apikey);
+        browseActivity = (BrowseActivity) getActivity();
 
 
         /*
@@ -152,7 +150,7 @@ public class StreamFragment extends Fragment {
 
         };
 
-        twitch.streams().get(params, streamsResponseHandler);
+        browseActivity.twitch.streams().get(params, streamsResponseHandler);
     }
 
     private class StreamItemClickListener implements ListView.OnItemClickListener {

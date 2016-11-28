@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mb3364.http.RequestParams;
-import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
 import com.mb3364.twitch.api.models.TopGame;
 
@@ -22,13 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import teamsylvanmatthew.memecenter.Activities.BrowseActivity;
 import teamsylvanmatthew.memecenter.Adapters.TopGameAdapter;
 import teamsylvanmatthew.memecenter.R;
 
 public class GameFragment extends Fragment {
     private static int limit = 0;
     private static int offset = 100;
-    private Twitch twitch;
+    private BrowseActivity browseActivity;
     private Activity mActivity;
     private View mView;
     private ArrayList<TopGame> gameList;
@@ -40,9 +40,7 @@ public class GameFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_game, container, false);
         mActivity = getActivity();
 
-        twitch = new Twitch();
-        String apikey = getResources().getString(R.string.apikey);
-        twitch.setClientId(apikey);
+        browseActivity = (BrowseActivity) getActivity();
 
         gameListView = (ListView) mView.findViewById(R.id.game_listview);
         setupGameList();
@@ -122,7 +120,7 @@ public class GameFragment extends Fragment {
             }
         };
 
-        twitch.games().getTop(params, topGamesResponseHandler);
+        browseActivity.twitch.games().getTop(params, topGamesResponseHandler);
     }
 
     private class GameItemClickListener implements ListView.OnItemClickListener {
