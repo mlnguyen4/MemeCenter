@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -19,16 +18,16 @@ import com.mb3364.twitch.api.models.Stream;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import teamsylvanmatthew.memecenter.Activities.BrowseActivity;
 import teamsylvanmatthew.memecenter.Activities.ChatActivity;
 import teamsylvanmatthew.memecenter.Adapters.StreamAdapter;
+import teamsylvanmatthew.memecenter.Listeners.DataLoadListener;
 import teamsylvanmatthew.memecenter.R;
 
 public class StreamFragment extends Fragment {
-    private static int limit = 0;
-    private static int offset = 100;
+    private static int limit = 25;
+    private static int offset = 0;
     private BrowseActivity browseActivity;
     private Activity mActivity;
     private View mView;
@@ -53,35 +52,43 @@ public class StreamFragment extends Fragment {
         streamList = new ArrayList<Stream>();
         mStreamAdapter = new StreamAdapter(mActivity, streamList);
 
-        //incase user has scrolled, left to different activity and came back
-        //prevents overflow
-        limit = 0;
         updateStreamList();
-        streamListView.setAdapter(mStreamAdapter);
 
+        streamListView.setAdapter(mStreamAdapter);
         streamListView.setOnItemClickListener(new StreamItemClickListener());
+        streamListView.setOnScrollListener(new DataLoadListener() {
+            @Override
+            public void onLoadMore() {
+                System.out.println("ADD MORE");
+                this.loading = true;
+                addToStreamList();
+            }
+        });
 
     }
 
-    //game resource.java
-    private void updateStreamList() {
 
+    private void updateStreamList() {
+        limit = 25;
+        offset = 0;
+        addToStreamList();
+    }
+
+
+    private void addToStreamList() {
         RequestParams params = new RequestParams();
-        limit += 15;
-        offset += 15;
-        System.out.println("The limit and offset :" + limit + "    " + offset);
         params.put("limit", limit);
         params.put("offset", offset);
+        offset += 25;
+
         StreamsResponseHandler streamsResponseHandler = new StreamsResponseHandler() {
             @Override
             public void onSuccess(int statusCode, List<Stream> streams) {
                 /* Successful response from the Twitch API */
-                streamList.clear();
-
                 for (Stream stream : streams) {
                     streamList.add(stream);
                 }
-                System.out.println("The size of stream array list :" + streamList.size());
+
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mStreamAdapter.notifyDataSetChanged();
@@ -92,27 +99,6 @@ public class StreamFragment extends Fragment {
                         if (loadingFragment != null) {
                             fragmentManager.beginTransaction().remove(loadingFragment).commit();
                         }
-
-                        streamListView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                            int items = offset;
-
-                            @Override
-                            public void onScrollChanged() {
-                                if (streamListView.getLastVisiblePosition() == streamListView.getAdapter().getCount() - 1 && streamListView.getChildAt(streamListView.getChildCount() - 1).getBottom() <= streamListView.getHeight()) {
-                                    if (streamListView.getAdapter().getCount() < 90) {
-                                        updateStreamList();
-                                        try {
-                                            TimeUnit.SECONDS.sleep(1);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-
-                                }
-                            }
-
-                        });
-
                     }
                 });
             }
@@ -134,6 +120,7 @@ public class StreamFragment extends Fragment {
 
         browseActivity.twitch.streams().get(params, streamsResponseHandler);
     }
+
 
     private class StreamItemClickListener implements ListView.OnItemClickListener {
         @Override
