@@ -69,7 +69,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onGenericMessage(final GenericMessageEvent event) throws Exception {
                             postMessage(new Message(event.getUser().getNick(), event.getMessage()));
-                            event.respond("recieved");
+                            //event.respond("recieved");
                         }
 
                     });

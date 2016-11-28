@@ -4,19 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
+    <TextView
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:ems="10" />
 
     <TextView
         android:id="@+id/editTextMsg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:ems="10" />
-
-    <TextView
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
         android:ems="10" />
 
 </LinearLayout>
