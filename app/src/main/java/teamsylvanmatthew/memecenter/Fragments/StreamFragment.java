@@ -35,30 +35,12 @@ public class StreamFragment extends Fragment {
     private StreamAdapter mStreamAdapter;
     private ArrayList<Stream> streamList;
     private ListView streamListView;
-    //private ScrollView streamScrollView;
 
-    //params.put("offset", 50);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_stream, container, false);
-
         mActivity = getActivity();
-
         browseActivity = (BrowseActivity) getActivity();
-
-
-        /*
-        //checks when user scrolls
-        final ScrollView streamScrollView = (ScrollView) mView.findViewById(R.id.stream_scrollview);
-        streamScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                Log.d("onScrollChanged Y", String.valueOf(streamScrollView.getScrollY()));
-            }
-        });*/
-
-
-
         streamListView = (ListView) mView.findViewById(R.id.stream_listview);
 
         setupStreamList();
