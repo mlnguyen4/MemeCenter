@@ -59,12 +59,11 @@ public class StreamFragment extends Fragment {
         streamListView.setOnScrollListener(new DataLoadListener() {
             @Override
             public void onLoadMore() {
-                System.out.println("ADD MORE");
+                //System.out.println("ADD MORE");
                 this.loading = true;
                 addToStreamList();
             }
         });
-
     }
 
 
@@ -105,10 +104,11 @@ public class StreamFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, String statusMessage, String errorMessage) {
-                /* Twitch API responded with an error message */
+                /* Twitch API responded with an error message
                 System.out.println("The statusCode: " + statusCode);
                 System.out.println("The statusMessage: " + statusMessage);
                 System.out.println("The errorMessage: " + errorMessage);
+                */
             }
 
             @Override
