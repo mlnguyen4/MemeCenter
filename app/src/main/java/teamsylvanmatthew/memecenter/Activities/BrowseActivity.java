@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.mb3364.twitch.api.Twitch;
 
 import teamsylvanmatthew.memecenter.Fragments.GameFragment;
+import teamsylvanmatthew.memecenter.Fragments.HomeFragment;
 import teamsylvanmatthew.memecenter.Fragments.LoadingFragment;
 import teamsylvanmatthew.memecenter.Fragments.StreamFragment;
 import teamsylvanmatthew.memecenter.R;
@@ -29,6 +30,7 @@ public class BrowseActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle mDrawerToggle;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,11 @@ public class BrowseActivity extends AppCompatActivity {
         twitch = new Twitch();
         String apikey = getResources().getString(R.string.clientid);
         twitch.setClientId(apikey);
+
+        fragmentManager = getSupportFragmentManager();
+        HomeFragment homeFragment = new HomeFragment();
+        fragmentManager.beginTransaction().add(R.id.fragmentLayout, homeFragment, "TAG_HOME").commit();
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -82,41 +89,41 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        Fragment fragment = null;
-        Class fragmentClass;
-
-        fragmentClass = LoadingFragment.class;
         try {
+            Fragment fragment = null;
+            Class fragmentClass;
+
+            fragmentClass = LoadingFragment.class;
+
             fragment = (Fragment) fragmentClass.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.fragmentLayout, fragment, "TAG_LOADING").commit();
+
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    fragmentClass = HomeFragment.class;
+                    break;
+                case R.id.nav_game:
+                    fragmentClass = GameFragment.class;
+                    break;
+                case R.id.nav_stream:
+                    fragmentClass = StreamFragment.class;
+                    break;
+                case R.id.nav_follow:
+                    fragmentClass = LoadingFragment.class;
+                    break;
+                default:
+                    fragmentClass = HomeFragment.class;
+            }
+
+
+            fragment = (Fragment) fragmentClass.newInstance();
+            fragmentManager.beginTransaction().add(R.id.fragmentLayout, fragment, "TAG_GAMES").commit();
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fragmentManager.beginTransaction().replace(R.id.fragmentLayout, fragment, "TAG_LOADING").commit();
-
-        switch (menuItem.getItemId()) {
-            case R.id.nav_game:
-                fragmentClass = GameFragment.class;
-                break;
-            case R.id.nav_stream:
-                fragmentClass = StreamFragment.class;
-                break;
-            case R.id.nav_follow:
-                fragmentClass = LoadingFragment.class;
-                break;
-            default:
-                fragmentClass = GameFragment.class;
-        }
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        fragmentManager.beginTransaction().add(R.id.fragmentLayout, fragment).commit();
 
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
