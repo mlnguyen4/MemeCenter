@@ -19,6 +19,7 @@ import com.mb3364.twitch.api.Twitch;
 import teamsylvanmatthew.memecenter.Fragments.GameFragment;
 import teamsylvanmatthew.memecenter.Fragments.HomeFragment;
 import teamsylvanmatthew.memecenter.Fragments.LoadingFragment;
+import teamsylvanmatthew.memecenter.Fragments.SearchFragment;
 import teamsylvanmatthew.memecenter.Fragments.StreamFragment;
 import teamsylvanmatthew.memecenter.R;
 
@@ -109,6 +110,9 @@ public class BrowseActivity extends AppCompatActivity {
                 case R.id.nav_stream:
                     fragmentClass = StreamFragment.class;
                     break;
+                case R.id.nav_search:
+                    fragmentClass = SearchFragment.class;
+                    break;
                 case R.id.nav_follow:
                     fragmentClass = LoadingFragment.class;
                     break;
@@ -118,7 +122,7 @@ public class BrowseActivity extends AppCompatActivity {
 
 
             fragment = (Fragment) fragmentClass.newInstance();
-            fragmentManager.beginTransaction().add(R.id.fragmentLayout, fragment, "TAG_GAMES").commit();
+            fragmentManager.beginTransaction().add(R.id.fragmentLayout, fragment, "TAG_MAIN").commit();
 
 
         } catch (Exception e) {

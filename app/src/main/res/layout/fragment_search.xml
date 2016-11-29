@@ -1,0 +1,31 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="teamsylvanmatthew.memecenter.Fragments.LoadingFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Search Text"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/searchDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Leave the text field blank to filter only."
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+</FrameLayout>
