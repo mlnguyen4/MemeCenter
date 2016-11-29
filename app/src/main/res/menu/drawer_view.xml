@@ -15,6 +15,10 @@
             android:icon="@drawable/ic_voice_chat_black"
             android:title="@string/drawer_stream" />
         <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search_black"
+            android:title="@string/drawer_search" />
+        <item
             android:id="@+id/nav_follow"
             android:icon="@drawable/ic_group_black"
             android:title="@string/drawer_follower" />
