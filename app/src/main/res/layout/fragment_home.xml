@@ -11,10 +11,6 @@
         android:layout_height="wrap_content"
         android:text="Home" />
 
-    <ListView
-        android:id="@+id/stream_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <include layout="@layout/item_notification" />
 
