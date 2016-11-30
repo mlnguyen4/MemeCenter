@@ -1,112 +1,121 @@
 package teamsylvanmatthew.memecenter.Activities;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
+import com.google.common.base.Splitter;
 import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.auth.Scopes;
+
+import java.net.URI;
+import java.util.Map;
 
 import teamsylvanmatthew.memecenter.R;
-
+import teamsylvanmatthew.memecenter.Utils.GetUsernameTask;
 
 
 public class LoginActivity extends AppCompatActivity {
-    static String authenticationToken;
+    private WebView webview;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        twitchAuthenticationWebView();
+        setupWebview();
 
+        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+
+        Twitch twitch = new Twitch();
+        String clientID = getResources().getString(R.string.clientid);
+        String redirectUrl = getResources().getString(R.string.redirecturl);
+        twitch.setClientId(clientID);
+
+        try {
+            String twitchLoginPageUrl = "https://api.twitch.tv/kraken/oauth2/authorize.html";
+            URI callbackUri = new URI(redirectUrl);
+            String authUrl = twitch.auth().getAuthenticationUrl(clientID, callbackUri, Scopes.USER_READ, Scopes.CHANNEL_READ);
+            webview.loadUrl(authUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
+    public void setupWebview() {
+        webview = (WebView) findViewById(R.id.twitchAuthenticationWebView);
+        webview.clearCache(true);
+        webview.clearHistory();
+
+        //CookieManager cookieManager = CookieManager.getInstance();
+        //cookieManager.setAcceptCookie(false);
+
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setSaveFormData(false);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setSupportMultipleWindows(true);
+
+        webview.setWebChromeClient(new WebChromeClient());
+        webview.setWebViewClient(new WebViewClient() {
+            public void onPageStarted(WebView view, String url) {
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressbar);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressbar);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                String[] urlSplit = url.split("\\#");
+                if (urlSplit.length >= 2) {
+                    String query = urlSplit[1];
+                    Map<String, String> map = Splitter.on('&').trimResults().withKeyValueSeparator("=").split(query);
+                    System.out.println(map);
+
+                    String oauth = map.get("access_token");
+                    if (oauth != null) {
+                        System.out.println("OAUTH: " + oauth);
+
+                        try {
+                            String result = new GetUsernameTask()
+                                    .execute("https://api.twitch.tv/kraken?oauth_token=" + oauth)
+                                    .get();
 
 
-    //Sets up the webview to allow the user to login to their Twitch account
-    //Once the user enters valid credentials, the function enters the authentication token into
-    //the twitch object and redirects user to Browse Activity
-    public void twitchAuthenticationWebView()
-    {
-        WebView webview = new WebView(this);
-        setContentView(webview);
-
-        String clientID = getResources().getString(R.string.clientid);
-        String redirectUrl = getResources().getString(R.string.redirecturl);
-        //The list of permissions we are asking Twitch for about the user
-        //we can remove any we don't need, I included everything to start
-        //they MUST be space separated
-        String listOfScopes =   "user_read "+
-                "user_blocks_edit "+
-                "user_blocks_read "+
-                "user_follows_edit "+
-                "channel_read "+
-                "channel_editor "+
-                "channel_commercial "+
-                "channel_stream "+
-                "channel_subscriptions "+
-                "user_subscriptions "+
-                "channel_check_subscription " +
-                "chat_login "+
-                "channel_feed_read "+
-                "channel_feed_edit";
-        String twitchLoginPageUrl =    "https://api.twitch.tv/kraken/oauth2/authorize" +
-                "?response_type=code"+
-                "&client_id=" + clientID +
-                "&redirect_uri="+ redirectUrl+
-                "&scope="+ listOfScopes;
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("authenticated", 1);
+                            editor.putString("username", result);
+                            editor.putString("oauth", oauth);
+                            editor.commit();
 
 
-        webview.getSettings().setJavaScriptEnabled(true);
-        webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webview.getSettings().setSupportMultipleWindows(true);
-
-        webview.setWebViewClient(new WebViewClient(){
-            public void onPageStarted(WebView view, String url, Bitmap favicon){
-                String startOfCodeParameter = "?code=";
-                String endOfCodeParameter = "&scope=";
-                System.out.println("The url " + url);
-
-                //finds the start of the authentication token
-                int start = url.indexOf(startOfCodeParameter);
-
-                //when the browser enters callback url, i.e. user successfully logged in Twitch account
-                if (start > -1) {
-
-                    view.stopLoading();
-
-                    //finds where the token ends
-                    int end= url.indexOf(endOfCodeParameter);
-
-                    String code = url.substring(start+startOfCodeParameter.length(), end);
-                    System.out.println("The code " + code);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
 
-                    Twitch twitch = new Twitch();
-                    String clientID = getResources().getString(R.string.clientid);
-                    twitch.setClientId(clientID); // registered application's client ID
-                    twitch.auth().setAccessToken(code);
-
-                    //Send authenticated Twitch object to where ever Sylvan wants it
-                    //from this line onwards
-                    Intent loginIntent = new Intent(LoginActivity.this, BrowseActivity.class);
-                    startActivity(loginIntent);
+                        onBackPressed();
+                    }
                 }
             }
 
-
+            public void onReceivedHttpError(WebView view, int errorCode, String description, String failingUrl) {
+            }
         });
-        webview.loadUrl(twitchLoginPageUrl);
-        webview.setWebChromeClient(new WebChromeClient());
+
+
     }
-
-
-
 
 }
