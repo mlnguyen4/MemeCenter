@@ -14,4 +14,12 @@
         android:drawableLeft="@drawable/ic_account_circle_black"
         android:text="@string/drawer_login" />
 
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
 </LinearLayout>

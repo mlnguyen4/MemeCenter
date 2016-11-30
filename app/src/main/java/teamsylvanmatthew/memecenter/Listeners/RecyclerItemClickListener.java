@@ -49,8 +49,14 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     }
 
     public interface OnItemClickListener {
+<<<<<<< HEAD
         public void onItemClick(View view, int position);
 
         public void onLongItemClick(View view, int position);
+=======
+        void onItemClick(View view, int position);
+
+        void onLongItemClick(View view, int position);
+>>>>>>> origin/master
     }
 }

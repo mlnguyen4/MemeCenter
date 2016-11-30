@@ -1,6 +1,8 @@
 package teamsylvanmatthew.memecenter.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.mb3364.twitch.api.Twitch;
 
@@ -38,6 +41,7 @@ public class BrowseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
 
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle = setupDrawerToggle();
@@ -60,11 +64,25 @@ public class BrowseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        checkAuthentication();
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void checkAuthentication() {
+        SharedPreferences sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+        if (sharedPreferences.getInt("authenticated", 0) == 1) {
+            String username = sharedPreferences.getString("username", "unknown");
+            Button btn_loginButton = (Button) findViewById(R.id.login_button);
+            TextView tv_username = (TextView) findViewById(R.id.username);
+
+            tv_username.setText(username);
+            tv_username.setVisibility(View.VISIBLE);
+            btn_loginButton.setVisibility(View.GONE);
+        }
     }
 
     private void setupDrawer(NavigationView navigationView) {
@@ -135,6 +153,7 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
+
         return new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
     }
 
