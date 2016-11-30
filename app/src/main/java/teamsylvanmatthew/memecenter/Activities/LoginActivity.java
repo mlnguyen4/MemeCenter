@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -24,30 +23,41 @@ import teamsylvanmatthew.memecenter.Utils.GetUsernameTask;
 
 
 public class LoginActivity extends AppCompatActivity {
-    static String authenticationToken;
+    private WebView webview;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        twitchAuthenticationWebView();
-    }
+        setupWebview();
 
-
-    public void twitchAuthenticationWebView() {
+        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
 
         Twitch twitch = new Twitch();
         String clientID = getResources().getString(R.string.clientid);
         String redirectUrl = getResources().getString(R.string.redirecturl);
         twitch.setClientId(clientID);
 
-        WebView webview = (WebView) findViewById(R.id.twitchAuthenticationWebView);
+        try {
+            String twitchLoginPageUrl = "https://api.twitch.tv/kraken/oauth2/authorize.html";
+            URI callbackUri = new URI(redirectUrl);
+            String authUrl = twitch.auth().getAuthenticationUrl(clientID, callbackUri, Scopes.USER_READ, Scopes.CHANNEL_READ);
+            webview.loadUrl(authUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void setupWebview() {
+        webview = (WebView) findViewById(R.id.twitchAuthenticationWebView);
         webview.clearCache(true);
         webview.clearHistory();
 
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptCookie(false);
+        //CookieManager cookieManager = CookieManager.getInstance();
+        //cookieManager.setAcceptCookie(false);
 
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -83,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .execute("https://api.twitch.tv/kraken?oauth_token=" + oauth)
                                     .get();
 
-                            SharedPreferences sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putInt("authenticated", 1);
                             editor.putString("username", result);
@@ -105,14 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        try {
-            String twitchLoginPageUrl = "https://api.twitch.tv/kraken/oauth2/authorize.html";
-            URI callbackUri = new URI(redirectUrl);
-            String authUrl = twitch.auth().getAuthenticationUrl(clientID, callbackUri, Scopes.USER_READ, Scopes.CHANNEL_READ);
-            webview.loadUrl(authUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
 }
