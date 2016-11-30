@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -92,20 +93,17 @@ public class LoginActivity extends AppCompatActivity {
                     twitch.setClientId(clientID); // registered application's client ID
                     twitch.auth().setAccessToken(code);
 
-
                     //Send authenticated Twitch object to where ever Sylvan wants it
                     //from this line onwards
                     Intent loginIntent = new Intent(LoginActivity.this, BrowseActivity.class);
                     startActivity(loginIntent);
-
-
                 }
             }
 
 
         });
-
-
+        webview.loadUrl(twitchLoginPageUrl);
+        webview.setWebChromeClient(new WebChromeClient());
     }
 
 
