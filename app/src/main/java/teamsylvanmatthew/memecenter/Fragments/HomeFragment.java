@@ -84,13 +84,6 @@ public class HomeFragment extends Fragment {
 
         updateStreamList();
 
-        //TODO: This is needed cause the setup takes too long, please replace when loading is fixed
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-
         streamListView.setLayoutManager(new GridLayoutManager(this.getContext(), 1, GridLayoutManager.HORIZONTAL, false));
         streamListView.setAdapter(mStreamAdapter);
         streamListView.addOnItemTouchListener(
@@ -210,7 +203,7 @@ public class HomeFragment extends Fragment {
 
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        mStreamAdapter.notifyDataSetChanged();
+                        mFeaturedStreamAdapter.notifyDataSetChanged();
 
                         FragmentManager fragmentManager = getFragmentManager();
                         Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
