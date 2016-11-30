@@ -24,6 +24,7 @@ public abstract class DataLoadListener implements AbsListView.OnScrollListener {
         }
     }
 
+
     public abstract void onLoadMore();
 
     @Override
