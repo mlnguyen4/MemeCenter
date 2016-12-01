@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -59,7 +60,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-        postMessage(new Message("APP", "Connecting..."));
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -96,13 +96,27 @@ public class ChatActivity extends AppCompatActivity {
 
                     bot = new PircBotX(builder.buildConfiguration());
                     bot.startBot();
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            TextView textView = (TextView) findViewById(R.id.connectionText);
+                            textView.setVisibility(View.GONE);
+                        }
+                    });
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         }).start();
-
-
+/*
+        try {
+            t.start();
+            t.join();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+*/
     }
 
     @Override

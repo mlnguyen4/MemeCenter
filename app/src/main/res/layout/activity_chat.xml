@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context="teamsylvanmatthew.memecenter.Activities.ChatActivity">
 
+    <TextView
+        android:id="@+id/connectionText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:padding="5dp"
+        android:paddingRight="30dp"
+        android:text="Connecting..."
+        android:textColor="@color/white" />
+
     <ListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
@@ -45,5 +56,6 @@
             android:layout_weight="1"
             android:background="@drawable/ic_send_black" />
     </LinearLayout>
+
 
 </LinearLayout>
