@@ -1,6 +1,8 @@
 package teamsylvanmatthew.memecenter.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -8,10 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
+import org.pircbotx.cap.EnableCapHandler;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -24,6 +26,7 @@ import teamsylvanmatthew.memecenter.R;
 public class ChatActivity extends AppCompatActivity {
     private String mCurrentUser = "justinfan58503920594859";
     private String mChannel;
+    private String mOauth;
     private ListView messageListView;
     private ArrayList<Message> messages;
     private MessageAdapter messageAdapter;
@@ -37,7 +40,8 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mChannel = intent.getStringExtra("channel");
         setTitle("Chat: " + mChannel);
-        mChannel = "memecenter";
+
+        getCredentials();
 
         messageListView = (ListView) findViewById(R.id.messageListView);
         messages = new ArrayList<Message>();
@@ -63,27 +67,22 @@ public class ChatActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             public void run() {
                 try {
-
-                    Configuration.Builder builder = new Configuration.Builder();
-                    builder.addServer("irc.freenode.net");
-                    builder.setName(mCurrentUser);
-                    builder.addAutoJoinChannel("#" + mChannel);
-                    builder.setMessageDelay(0);
-                    builder.setAutoReconnect(false);
-                    builder.setAutoSplitMessage(false);
-
-
-                    /*
                     Configuration.Builder builder = new Configuration.Builder();
                     builder.addServer("irc.chat.twitch.tv");
                     builder.setName(mCurrentUser);
                     builder.addAutoJoinChannel("#" + mChannel);
-                    //builder.setServerPassword(authcode);
                     builder.setMessageDelay(0);
-                    //builder.addListener(new ChatListener());
                     builder.setAutoReconnect(false);
                     builder.setAutoSplitMessage(false);
-*/
+                    builder.setAutoNickChange(false);
+                    builder.setOnJoinWhoEnabled(false);
+
+                    if (mOauth != null) {
+                        builder.setServerPassword("oauth:" + mOauth);
+                        builder.setCapEnabled(true);
+                        builder.addCapHandler(new EnableCapHandler("twitch.tv/membership"));
+                    }
+
 
                     builder.addListener(new ListenerAdapter() {
                         @Override
@@ -96,13 +95,16 @@ public class ChatActivity extends AppCompatActivity {
 
                     bot = new PircBotX(builder.buildConfiguration());
                     bot.startBot();
-
+/*
                     runOnUiThread(new Runnable() {
                         public void run() {
                             TextView textView = (TextView) findViewById(R.id.connectionText);
                             textView.setVisibility(View.GONE);
                         }
                     });
+                    */
+
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -127,6 +129,14 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getCredentials() {
+        SharedPreferences sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+        if (sharedPreferences.getInt("authenticated", 0) == 1) {
+            mCurrentUser = sharedPreferences.getString("username", "justinfan58503920594859");
+            mOauth = sharedPreferences.getString("oauth", null);
+        }
     }
 
     private boolean postMessage(Message msg) {
