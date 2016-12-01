@@ -2,15 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context="teamsylvanmatthew.memecenter.Fragments.LoadingFragment">
 
     <!-- PUT UR STUFF HERE -->
-
-    <Button
-        android:id="@+id/testButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
 
     <include layout="@layout/item_notification" />
 
@@ -72,7 +67,8 @@
                 android:clickable="true"
                 android:gravity="right"
                 android:onClick="onClick"
-                android:text="See all live games >>" />
+                android:text="See all live games >>"
+                android:textColor="#2D9DC8" />
         </LinearLayout>
 
         <TextView
@@ -101,7 +97,8 @@
                 android:clickable="true"
                 android:gravity="right"
                 android:onClick="onClick"
-                android:text="See all live Channels >>" />
+                android:text="See all live Channels >>"
+                android:textColor="#2D9DC8" />
         </LinearLayout>
     </LinearLayout>
 
