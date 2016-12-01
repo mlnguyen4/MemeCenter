@@ -56,7 +56,6 @@ public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.Vi
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        System.out.println("The streams size :" + streams.size());
         return streams.size();
     }
 

@@ -54,7 +54,6 @@ public class HomeTopGameAdapter extends RecyclerView.Adapter<HomeTopGameAdapter.
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        System.out.println("The games size :" + topGames.size());
         return topGames.size();
     }
 
