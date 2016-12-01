@@ -2,6 +2,7 @@ package teamsylvanmatthew.memecenter.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mb3364.http.RequestParams;
@@ -51,10 +53,12 @@ public class HomeFragment extends Fragment {
     private RecyclerView topGameListView;
     private RecyclerView featuredStreamListView;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_home, container, false);
         mActivity = getActivity();
+
         /* Remove Loading when Layout is ready */
         FragmentManager fragmentManager = getFragmentManager();
         Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
@@ -67,6 +71,27 @@ public class HomeFragment extends Fragment {
         featuredStreamListView = (RecyclerView) mView.findViewById(R.id.homeFeaturedStreamsRecyclerView);
         topGameListView = (RecyclerView) mView.findViewById(R.id.homeTopGamesRecyclerView);
 
+        TextView toStreams = (TextView) mView.findViewById(R.id.homeToTopStreamsTextView);
+        toStreams.setTextColor(Color.parseColor("#2D9DC8"));
+
+        TextView toTopGames = (TextView) mView.findViewById(R.id.homeToTopGamesTextView);
+        toTopGames.setTextColor(Color.parseColor("#2D9DC8"));
+
+        toStreams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StreamFragment streamFragment = new StreamFragment();
+                browseActivity.fragmentManager.beginTransaction().replace(R.id.fragmentLayout, streamFragment).commit();
+            }
+        });
+
+        toTopGames.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GameFragment gameFragment = new GameFragment();
+                browseActivity.fragmentManager.beginTransaction().replace(R.id.fragmentLayout, gameFragment).commit();
+            }
+        });
 
         setupLists();
 

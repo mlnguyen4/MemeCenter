@@ -25,7 +25,7 @@
         android:weightSum="10">
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Featured Channels" />
@@ -33,10 +33,12 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/homeFeaturedStreamsRecyclerView"
             android:layout_width="300dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Top Games" />
@@ -46,8 +48,23 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/homeToTopGamesTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="right"
+                android:onClick="onClick"
+                android:text="See all live games >>" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Most Popular Channels" />
@@ -56,6 +73,21 @@
             android:id="@+id/homeTopStreamsRecyclerView"
             android:layout_width="300dp"
             android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/homeToTopStreamsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="right"
+                android:onClick="onClick"
+                android:text="See all live Channels >>" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

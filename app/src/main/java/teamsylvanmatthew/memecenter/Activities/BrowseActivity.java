@@ -30,11 +30,12 @@ public class BrowseActivity extends AppCompatActivity {
     private static final String TAG = "BrowseActivity";
 
     public Twitch twitch;
+    public FragmentManager fragmentManager;
 
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle mDrawerToggle;
-    private FragmentManager fragmentManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
