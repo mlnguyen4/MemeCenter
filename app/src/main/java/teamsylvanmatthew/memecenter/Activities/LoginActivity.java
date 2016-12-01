@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.Map;
 
 import teamsylvanmatthew.memecenter.R;
-import teamsylvanmatthew.memecenter.Utils.GetUsernameTask;
+import teamsylvanmatthew.memecenter.Tasks.GetUsernameTask;
 
 
 public class LoginActivity extends AppCompatActivity {
