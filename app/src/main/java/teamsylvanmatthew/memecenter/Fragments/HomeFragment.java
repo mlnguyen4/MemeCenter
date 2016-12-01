@@ -2,7 +2,6 @@ package teamsylvanmatthew.memecenter.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -71,10 +70,7 @@ public class HomeFragment extends Fragment {
         topGameListView = (RecyclerView) mView.findViewById(R.id.homeTopGamesRecyclerView);
 
         TextView toStreams = (TextView) mView.findViewById(R.id.homeToTopStreamsTextView);
-        toStreams.setTextColor(Color.parseColor("#2D9DC8"));
-
         TextView toTopGames = (TextView) mView.findViewById(R.id.homeToTopGamesTextView);
-        toTopGames.setTextColor(Color.parseColor("#2D9DC8"));
 
         toStreams.setOnClickListener(new View.OnClickListener() {
             @Override
