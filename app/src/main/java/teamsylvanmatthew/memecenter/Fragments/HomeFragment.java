@@ -178,12 +178,6 @@ public class HomeFragment extends Fragment {
                     public void run() {
                         mStreamAdapter.notifyDataSetChanged();
 
-                        FragmentManager fragmentManager = getFragmentManager();
-                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-                        if (loadingFragment != null) {
-                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-                        }
                     }
                 });
             }
@@ -216,13 +210,6 @@ public class HomeFragment extends Fragment {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mFeaturedStreamAdapter.notifyDataSetChanged();
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-                        if (loadingFragment != null) {
-                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-                        }
                     }
                 });
             }
@@ -255,13 +242,6 @@ public class HomeFragment extends Fragment {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mTopGameAdapter.notifyDataSetChanged();
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-                        if (loadingFragment != null) {
-                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-                        }
                     }
                 });
             }
