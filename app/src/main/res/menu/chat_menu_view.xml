@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.toolbar.MainActivity">
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_filter_white"
+        android:menuCategory="secondary"
+        android:orderInCategory="1"
+        android:title="Filter"
+        app:showAsAction="always" />
+
+</menu>
