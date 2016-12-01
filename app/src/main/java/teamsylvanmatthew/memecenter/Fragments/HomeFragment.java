@@ -37,7 +37,6 @@ public class HomeFragment extends Fragment {
 
 
     private static int limit = 10;
-    private static int offset = 0;
     private BrowseActivity browseActivity;
     private Activity mActivity;
     private View mView;
@@ -107,7 +106,7 @@ public class HomeFragment extends Fragment {
         mFeaturedStreamAdapter = new HomeStreamAdapter(this.getContext(), featuredStreamList);
         mTopGameAdapter = new HomeTopGameAdapter(this.getContext(), topGameList);
 
-        updateStreamList();
+        addToAllListList();
 
         streamListView.setLayoutManager(new GridLayoutManager(this.getContext(), 1, GridLayoutManager.HORIZONTAL, false));
         streamListView.setAdapter(mStreamAdapter);
@@ -166,18 +165,10 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void updateStreamList() {
-
-        addToStreamList();
-        //addtogamelist
-    }
-
-
-    private void addToStreamList() {
+    private void addToAllListList() {
         RequestParams params = new RequestParams();
         params.put("limit", limit);
-        params.put("offset", offset);
-        offset += 25;
+
 
         StreamsResponseHandler streamsResponseHandler = new StreamsResponseHandler() {
             @Override
