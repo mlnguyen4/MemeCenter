@@ -87,6 +87,7 @@ public class FollowingFragment extends Fragment {
                 /* Successful response from the Twitch API */
                 for (Stream follow : follows) {
                     streamList.add(follow);
+                    System.out.println("Test 1");
                 }
 
                 mActivity.runOnUiThread(new Runnable() {
