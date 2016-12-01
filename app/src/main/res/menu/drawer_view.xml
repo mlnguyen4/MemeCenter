@@ -21,6 +21,7 @@
         <item
             android:id="@+id/nav_follow"
             android:icon="@drawable/ic_group_black"
-            android:title="@string/drawer_follower" />
+            android:title="@string/drawer_follower"
+            android:visible="false" />
     </group>
 </menu>
