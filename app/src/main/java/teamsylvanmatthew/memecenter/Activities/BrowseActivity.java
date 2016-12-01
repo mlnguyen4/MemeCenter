@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.mb3364.twitch.api.Twitch;
 
+import teamsylvanmatthew.memecenter.Fragments.FollowingFragment;
 import teamsylvanmatthew.memecenter.Fragments.GameFragment;
 import teamsylvanmatthew.memecenter.Fragments.HomeFragment;
 import teamsylvanmatthew.memecenter.Fragments.LoadingFragment;
@@ -133,7 +134,7 @@ public class BrowseActivity extends AppCompatActivity {
                     fragmentClass = SearchFragment.class;
                     break;
                 case R.id.nav_follow:
-                    fragmentClass = LoadingFragment.class;
+                    fragmentClass = FollowingFragment.class;
                     break;
                 default:
                     fragmentClass = HomeFragment.class;
