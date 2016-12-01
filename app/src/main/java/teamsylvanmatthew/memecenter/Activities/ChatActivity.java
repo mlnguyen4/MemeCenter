@@ -131,7 +131,8 @@ public class ChatActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_filter:
-                // User chose the "Settings" item, show the app settings UI...
+                Intent intent = new Intent(this, FilterActivity.class);
+                startActivity(intent);
                 return true;
         }
 
