@@ -79,6 +79,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     if (mOauth != null) {
                         builder.setServerPassword("oauth:" + mOauth);
+                        System.out.println("Test 1");
                         builder.setCapEnabled(true);
                         builder.addCapHandler(new EnableCapHandler("twitch.tv/membership"));
                     }
