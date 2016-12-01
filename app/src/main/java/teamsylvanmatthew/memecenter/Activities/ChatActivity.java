@@ -21,7 +21,8 @@ import teamsylvanmatthew.memecenter.Models.Message;
 import teamsylvanmatthew.memecenter.R;
 
 public class ChatActivity extends AppCompatActivity {
-    private String mCurrentUser = "tempuser";
+    private String mCurrentUser = "justinfan58503920594859";
+    private String mChannel;
     private ListView messageListView;
     private ArrayList<Message> messages;
     private MessageAdapter messageAdapter;
@@ -33,8 +34,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         Intent intent = getIntent();
-        String title = "Chat: " + intent.getStringExtra("channel");
-        setTitle(title);
+        mChannel = intent.getStringExtra("channel");
+        setTitle("Chat: " + mChannel);
 
         messageListView = (ListView) findViewById(R.id.messageListView);
         messages = new ArrayList<Message>();
@@ -55,13 +56,26 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+        postMessage(new Message("APP", "Connecting..."));
         new Thread(new Runnable() {
             public void run() {
                 try {
+                    /*
                     Configuration.Builder builder = new Configuration.Builder();
                     builder.addServer("irc.freenode.net");
                     builder.setName(mCurrentUser);
                     builder.addAutoJoinChannel("#memecenter");
+                    //builder.setServerPassword(authcode);
+                    builder.setMessageDelay(0);
+                    //builder.addListener(new ChatListener());
+                    builder.setAutoReconnect(false);
+                    builder.setAutoSplitMessage(false);
+*/
+
+                    Configuration.Builder builder = new Configuration.Builder();
+                    builder.addServer("irc.chat.twitch.tv");
+                    builder.setName(mCurrentUser);
+                    builder.addAutoJoinChannel("#" + mChannel);
                     //builder.setServerPassword(authcode);
                     builder.setMessageDelay(0);
                     //builder.addListener(new ChatListener());
