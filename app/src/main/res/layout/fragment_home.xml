@@ -41,6 +41,7 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="30dp"
             android:text="Top Games" />
 
         <android.support.v7.widget.RecyclerView
@@ -67,6 +68,7 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="30dp"
             android:text="Most Popular Channels" />
 
         <android.support.v7.widget.RecyclerView
