@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import java.util.List;
 
 import teamsylvanmatthew.memecenter.Activities.BrowseActivity;
 import teamsylvanmatthew.memecenter.Activities.ChatActivity;
-import teamsylvanmatthew.memecenter.Activities.FilterActivity;
 import teamsylvanmatthew.memecenter.Adapters.HomeStreamAdapter;
 import teamsylvanmatthew.memecenter.Adapters.HomeTopGameAdapter;
 import teamsylvanmatthew.memecenter.Listeners.RecyclerItemClickListener;
@@ -59,18 +57,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_home, container, false);
         mActivity = getActivity();
-
-        //Used to test FilterActivity
-        //TODO: Remove when filter Activity is complete
-        Button testButton = (Button) mView.findViewById(R.id.testButton);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FilterActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         /* Remove Loading when Layout is ready */
         FragmentManager fragmentManager = getFragmentManager();
