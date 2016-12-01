@@ -20,17 +20,22 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import teamsylvanmatthew.memecenter.Adapters.MessageAdapter;
 import teamsylvanmatthew.memecenter.Models.Message;
 import teamsylvanmatthew.memecenter.R;
 
 public class ChatActivity extends AppCompatActivity {
+    private SharedPreferences sharedPreferences;
     private String mCurrentUser = "justinfan58503920594859";
     private String mChannel;
     private String mOauth;
     private ListView messageListView;
     private ArrayList<Message> messages;
+    private ArrayList<Pattern> mFilterPatterns;
     private MessageAdapter messageAdapter;
     private PircBotX bot;
 
@@ -45,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
 
         getCredentials();
 
+
         messageListView = (ListView) findViewById(R.id.messageListView);
         messages = new ArrayList<Message>();
 
@@ -58,12 +64,14 @@ public class ChatActivity extends AppCompatActivity {
                 EditText msgText = (EditText) findViewById(R.id.messageText);
                 if (!msgText.equals("")) {
                     Message sendMessage = new Message(mCurrentUser, msgText.getText().toString());
-                    postMessage(sendMessage);
+                    postRawMessage(sendMessage);
                     bot.sendIRC().message("#" + mChannel, sendMessage.getMessage());
                     msgText.setText("");
                 }
             }
         });
+
+        getRegex();
 
 
         new Thread(new Runnable() {
@@ -90,7 +98,7 @@ public class ChatActivity extends AppCompatActivity {
                     builder.addListener(new ListenerAdapter() {
                         @Override
                         public void onGenericMessage(final GenericMessageEvent event) throws Exception {
-                            postMessage(new Message(event.getUser().getNick(), event.getMessage()));
+                            postFilteredMessage(new Message(event.getUser().getNick(), event.getMessage()));
                         }
 
                     });
@@ -124,6 +132,17 @@ public class ChatActivity extends AppCompatActivity {
 */
     }
 
+    private void getRegex() {
+        Set<String> filters = sharedPreferences.getStringSet("filterList", null);
+        mFilterPatterns = new ArrayList<Pattern>();
+
+        if (filters != null) {
+            for (String filter : filters) {
+                mFilterPatterns.add(Pattern.compile(filter));
+            }
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -146,14 +165,37 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void getCredentials() {
-        SharedPreferences sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
         if (sharedPreferences.getInt("authenticated", 0) == 1) {
             mCurrentUser = sharedPreferences.getString("username", "justinfan58503920594859");
             mOauth = sharedPreferences.getString("oauth", null);
         }
     }
 
-    private boolean postMessage(Message msg) {
+    private boolean postFilteredMessage(Message msg) {
+        Matcher m = null;
+
+        for (Pattern pattern : mFilterPatterns) {
+            m = pattern.matcher(msg.getMessage());
+            if (m.find()) {
+                return false;
+            }
+        }
+
+        if (!msg.getMessage().equals("")) {
+            messages.add(msg);
+            this.runOnUiThread(new Runnable() {
+                public void run() {
+                    messageAdapter.notifyDataSetChanged();
+                }
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean postRawMessage(Message msg) {
         if (!msg.getMessage().equals("")) {
             messages.add(msg);
             this.runOnUiThread(new Runnable() {
