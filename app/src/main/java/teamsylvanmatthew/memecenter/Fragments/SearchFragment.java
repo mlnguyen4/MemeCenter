@@ -13,9 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.mb3364.http.RequestParams;
+import com.mb3364.twitch.api.handlers.GamesResponseHandler;
 import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
+import com.mb3364.twitch.api.models.Game;
 import com.mb3364.twitch.api.models.Stream;
 
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ import java.util.List;
 
 import teamsylvanmatthew.memecenter.Activities.BrowseActivity;
 import teamsylvanmatthew.memecenter.Activities.ChatActivity;
+import teamsylvanmatthew.memecenter.Adapters.GameAdapter;
 import teamsylvanmatthew.memecenter.Adapters.StreamAdapter;
 import teamsylvanmatthew.memecenter.Listeners.DataLoadListener;
 import teamsylvanmatthew.memecenter.R;
@@ -35,8 +39,11 @@ public class SearchFragment extends Fragment {
     private Activity mActivity;
     private View mView;
     private StreamAdapter mStreamAdapter;
+    private GameAdapter mGameAdapter;
     private ArrayList<Stream> streamList;
-    private ListView streamListView;
+    private ArrayList<Game> gameList;
+    private ListView searchListView;
+    private ListView gameListView;
     private Button searchButton;
     private String query;
     private EditText searchEditText;
@@ -46,9 +53,10 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_search, container, false);
         mActivity = getActivity();
-
+        browseActivity = (BrowseActivity) getActivity();
         FragmentManager fragmentManager = getFragmentManager();
         Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
+
 
         if (loadingFragment != null) {
             fragmentManager.beginTransaction().remove(loadingFragment).commit();
@@ -61,8 +69,15 @@ public class SearchFragment extends Fragment {
                 searchEditText = (EditText) mView.findViewById(R.id.searchEditText);
                 query = searchEditText.getText().toString();
 
+                gamesRadioButton = (RadioButton) mView.findViewById(R.id.gamesRadioButton);
+
                 //TODO: fill radio button case logic
-                setupStreamList();
+                if (gamesRadioButton.isChecked()) {
+                    setupGameList();
+                } else {
+                    setupStreamList();
+                }
+
             }
         });
 
@@ -74,12 +89,13 @@ public class SearchFragment extends Fragment {
     private void setupStreamList() {
         streamList = new ArrayList<Stream>();
         mStreamAdapter = new StreamAdapter(mActivity, streamList);
+        searchListView = (ListView) mView.findViewById(R.id.search_listview);
 
         updateStreamList();
 
-        streamListView.setAdapter(mStreamAdapter);
-        streamListView.setOnItemClickListener(new SearchFragment.StreamItemClickListener());
-        streamListView.setOnScrollListener(new DataLoadListener() {
+        searchListView.setAdapter(mStreamAdapter);
+        searchListView.setOnItemClickListener(new SearchFragment.StreamItemClickListener());
+        searchListView.setOnScrollListener(new DataLoadListener() {
             @Override
             public void onLoadMore() {
                 //System.out.println("ADD MORE");
@@ -110,12 +126,83 @@ public class SearchFragment extends Fragment {
                 for (Stream stream : streams) {
                     streamList.add(stream);
                 }
-
+                System.out.println("The Query :" + query);
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mStreamAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
 
+            @Override
+            public void onFailure(int statusCode, String statusMessage, String errorMessage) {
+                //Twitch API responded with an error message
+                System.out.println("The statusCode: " + statusCode);
+                System.out.println("The statusMessage: " + statusMessage);
+                System.out.println("The errorMessage: " + errorMessage);
 
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                /* Unable to access Twitch, or error parsing the response */
+            }
+
+        };
+
+        browseActivity.twitch.search().streams(query, params, streamsResponseHandler);
+    }
+
+    private void setupGameList() {
+        gameList = new ArrayList<Game>();
+        mGameAdapter = new GameAdapter(mActivity, gameList);
+
+        gameListView = (ListView) mView.findViewById(R.id.search_listview);
+
+        updateGameList();
+        gameListView.setAdapter(mGameAdapter);
+        gameListView.setOnItemClickListener(new SearchFragment.GameItemClickListener());
+        gameListView.setOnScrollListener(new DataLoadListener() {
+            @Override
+            public void onLoadMore() {
+                //System.out.println("ADD MORE");
+                this.loading = true;
+                addToGameList();
+            }
+        });
+    }
+
+    private void updateGameList() {
+        limit = 25;
+        offset = 0;
+        addToGameList();
+    }
+
+    private void addToGameList() {
+        RequestParams params = new RequestParams();
+        params.put("limit", limit);
+        params.put("offset", offset);
+        offset += 25;
+
+        GamesResponseHandler GamesResponseHandler = new GamesResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, List<Game> topGames) {
+                /* Successful response from the Twitch API */
+
+                for (Game game : topGames) {
+                    gameList.add(game);
+                }
+
+                mActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        mGameAdapter.notifyDataSetChanged();
+
+                        FragmentManager fragmentManager = getFragmentManager();
+                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
+
+                        if (loadingFragment != null) {
+                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
+                        }
                     }
                 });
             }
@@ -133,12 +220,10 @@ public class SearchFragment extends Fragment {
             public void onFailure(Throwable e) {
                 /* Unable to access Twitch, or error parsing the response */
             }
-
         };
 
-        browseActivity.twitch.search().streams(query, params, streamsResponseHandler);
+        browseActivity.twitch.search().games(query, params, GamesResponseHandler);
     }
-
 
     private class StreamItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -149,5 +234,12 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    private class GameItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Toast.makeText(mActivity, "Item " + position, Toast.LENGTH_SHORT).show();
+
+        }
+    }
 
 }
