@@ -47,6 +47,13 @@ public class SearchFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_search, container, false);
         mActivity = getActivity();
 
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
+
+        if (loadingFragment != null) {
+            fragmentManager.beginTransaction().remove(loadingFragment).commit();
+        }
+
         searchButton = (Button) mView.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,12 +115,7 @@ public class SearchFragment extends Fragment {
                     public void run() {
                         mStreamAdapter.notifyDataSetChanged();
 
-                        FragmentManager fragmentManager = getFragmentManager();
-                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
 
-                        if (loadingFragment != null) {
-                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-                        }
                     }
                 });
             }
