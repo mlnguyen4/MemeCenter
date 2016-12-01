@@ -14,12 +14,28 @@
         android:drawableLeft="@drawable/ic_account_circle_black"
         android:text="@string/drawer_login" />
 
-    <TextView
-        android:id="@+id/username"
+    <LinearLayout
+        android:id="@+id/auth_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="unknown"
+            android:textSize="24dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_logout_white" />
+    </LinearLayout>
 
 </LinearLayout>

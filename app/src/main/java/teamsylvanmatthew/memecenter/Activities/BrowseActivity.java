@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mb3364.twitch.api.Twitch;
@@ -29,13 +30,16 @@ import teamsylvanmatthew.memecenter.R;
 
 public class BrowseActivity extends AppCompatActivity {
     private static final String TAG = "BrowseActivity";
-
     public Twitch twitch;
     public FragmentManager fragmentManager;
-
+    private SharedPreferences sharedPreferences;
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private LinearLayout linearLayout;
+    private Button btn_loginButton;
+    private TextView tv_username;
 
 
     @Override
@@ -43,6 +47,7 @@ public class BrowseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
 
+        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
@@ -75,15 +80,31 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private void checkAuthentication() {
-        SharedPreferences sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+        linearLayout = (LinearLayout) findViewById(R.id.auth_banner);
+        btn_loginButton = (Button) findViewById(R.id.login_button);
+        tv_username = (TextView) findViewById(R.id.username);
+
         if (sharedPreferences.getInt("authenticated", 0) == 1) {
             String username = sharedPreferences.getString("username", "unknown");
-            Button btn_loginButton = (Button) findViewById(R.id.login_button);
-            TextView tv_username = (TextView) findViewById(R.id.username);
+
 
             tv_username.setText(username);
-            tv_username.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.VISIBLE);
             btn_loginButton.setVisibility(View.GONE);
+
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("authenticated", 0);
+                    editor.commit();
+
+                    mDrawerLayout.closeDrawers();
+
+                    linearLayout.setVisibility(View.GONE);
+                    btn_loginButton.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 
@@ -102,6 +123,7 @@ public class BrowseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent loginIntent = new Intent(BrowseActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
+                mDrawerLayout.closeDrawers();
             }
         });
 
