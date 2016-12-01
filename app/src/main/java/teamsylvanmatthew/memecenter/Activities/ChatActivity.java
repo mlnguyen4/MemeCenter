@@ -36,6 +36,7 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mChannel = intent.getStringExtra("channel");
         setTitle("Chat: " + mChannel);
+        mChannel = "memecenter";
 
         messageListView = (ListView) findViewById(R.id.messageListView);
         messages = new ArrayList<Message>();
@@ -49,7 +50,9 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText msgText = (EditText) findViewById(R.id.messageText);
                 if (!msgText.equals("")) {
-                    postMessage(new Message(mCurrentUser, msgText.getText().toString()));
+                    Message sendMessage = new Message(mCurrentUser, msgText.getText().toString());
+                    postMessage(sendMessage);
+                    bot.sendIRC().message("#" + mChannel, sendMessage.getMessage());
                     msgText.setText("");
                 }
             }
@@ -60,18 +63,17 @@ public class ChatActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    /*
+
                     Configuration.Builder builder = new Configuration.Builder();
                     builder.addServer("irc.freenode.net");
                     builder.setName(mCurrentUser);
-                    builder.addAutoJoinChannel("#memecenter");
-                    //builder.setServerPassword(authcode);
+                    builder.addAutoJoinChannel("#" + mChannel);
                     builder.setMessageDelay(0);
-                    //builder.addListener(new ChatListener());
                     builder.setAutoReconnect(false);
                     builder.setAutoSplitMessage(false);
-*/
 
+
+                    /*
                     Configuration.Builder builder = new Configuration.Builder();
                     builder.addServer("irc.chat.twitch.tv");
                     builder.setName(mCurrentUser);
@@ -81,12 +83,12 @@ public class ChatActivity extends AppCompatActivity {
                     //builder.addListener(new ChatListener());
                     builder.setAutoReconnect(false);
                     builder.setAutoSplitMessage(false);
+*/
 
                     builder.addListener(new ListenerAdapter() {
                         @Override
                         public void onGenericMessage(final GenericMessageEvent event) throws Exception {
                             postMessage(new Message(event.getUser().getNick(), event.getMessage()));
-                            //event.respond("recieved");
                         }
 
                     });
