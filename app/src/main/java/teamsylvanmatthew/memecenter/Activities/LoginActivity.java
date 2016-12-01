@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             String twitchLoginPageUrl = "https://api.twitch.tv/kraken/oauth2/authorize.html";
             URI callbackUri = new URI(redirectUrl);
-            String authUrl = twitch.auth().getAuthenticationUrl(clientID, callbackUri, Scopes.USER_READ, Scopes.CHANNEL_READ);
+            String authUrl = twitch.auth().getAuthenticationUrl(clientID, callbackUri, Scopes.USER_READ, Scopes.USER_BLOCKS_EDIT, Scopes.USER_BLOCKS_READ, Scopes.USER_FOLLOWS_EDIT, Scopes.CHANNEL_READ, Scopes.CHANNEL_EDITOR, Scopes.CHANNEL_COMMERCIAL, Scopes.CHANNEL_STREAM, Scopes.CHANNEL_SUBSCRIPTIONS, Scopes.USER_SUBSCRIPTIONS, Scopes.CHANNEL_CHECK_SUBSCRIPTION, Scopes.CHAT_LOGIN);
             webview.loadUrl(authUrl);
         } catch (Exception e) {
             e.printStackTrace();
