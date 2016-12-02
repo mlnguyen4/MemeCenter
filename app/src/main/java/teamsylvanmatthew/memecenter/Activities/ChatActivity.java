@@ -38,6 +38,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Pattern> mFilterPatterns;
     private MessageAdapter messageAdapter;
     private PircBotX bot;
+    private Message mMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +64,10 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText msgText = (EditText) findViewById(R.id.messageText);
                 if (!msgText.equals("")) {
-                    Message sendMessage = new Message(mCurrentUser, msgText.getText().toString());
-                    postRawMessage(sendMessage);
-                    bot.sendIRC().message("#" + mChannel, sendMessage.getMessage());
+                    mMsg = new Message(mCurrentUser, msgText.getText().toString());
+                    //postRawMessage(mMsg);
+                    postRawMessage();
+                    bot.sendIRC().message("#" + mChannel, mMsg.getMessage());
                     msgText.setText("");
                 }
             }
@@ -98,7 +100,10 @@ public class ChatActivity extends AppCompatActivity {
                     builder.addListener(new ListenerAdapter() {
                         @Override
                         public void onGenericMessage(final GenericMessageEvent event) throws Exception {
-                            postFilteredMessage(new Message(event.getUser().getNick(), event.getMessage()));
+                            mMsg = new Message(event.getUser().getNick(), event.getMessage());
+                            postFilteredMessage();
+
+                            //postFilteredMessage(new Message(event.getUser().getNick(), event.getMessage()));
                         }
 
                     });
@@ -172,20 +177,22 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private boolean postFilteredMessage(Message msg) {
+    private boolean postFilteredMessage() {
         Matcher m = null;
 
         for (Pattern pattern : mFilterPatterns) {
-            m = pattern.matcher(msg.getMessage());
+            m = pattern.matcher(mMsg.getMessage());
             if (m.find()) {
                 return false;
             }
         }
 
-        if (!msg.getMessage().equals("")) {
-            messages.add(msg);
+        if (!mMsg.getMessage().equals("")) {
+
             this.runOnUiThread(new Runnable() {
+
                 public void run() {
+                    messages.add(mMsg);
                     messageAdapter.notifyDataSetChanged();
                 }
             });
@@ -195,11 +202,13 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private boolean postRawMessage(Message msg) {
-        if (!msg.getMessage().equals("")) {
-            messages.add(msg);
+    private boolean postRawMessage() {
+        if (!mMsg.getMessage().equals("")) {
+
             this.runOnUiThread(new Runnable() {
+
                 public void run() {
+                    messages.add(mMsg);
                     messageAdapter.notifyDataSetChanged();
                 }
             });
