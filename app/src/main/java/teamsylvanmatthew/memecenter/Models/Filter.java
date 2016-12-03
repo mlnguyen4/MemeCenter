@@ -2,8 +2,6 @@ package teamsylvanmatthew.memecenter.Models;
 
 import android.provider.BaseColumns;
 
-import java.util.Set;
-
 
 public class Filter implements BaseColumns {
     public static final String TABLE_NAME = "filter";
@@ -11,7 +9,7 @@ public class Filter implements BaseColumns {
     public static final String NAME_COLUMN = "name";
     private String name;
 
-    public Filter(String name, Set<String> filters) {
+    public Filter(String name) {
         this.name = name;
     }
 
