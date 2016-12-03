@@ -32,9 +32,9 @@ public class BrowseActivity extends AppCompatActivity {
     private static final String TAG = "BrowseActivity";
     public Twitch twitch;
     public FragmentManager fragmentManager;
+    public NavigationView navigationView;
     private SharedPreferences sharedPreferences;
     private DrawerLayout mDrawerLayout;
-    private NavigationView navigationView;
     private ActionBarDrawerToggle mDrawerToggle;
 
     private LinearLayout linearLayout;
@@ -66,7 +66,7 @@ public class BrowseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        setupDrawer(navigationView);
+        setupDrawer();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class BrowseActivity extends AppCompatActivity {
         }
     }
 
-    private void setupDrawer(NavigationView navigationView) {
+    private void setupDrawer() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
