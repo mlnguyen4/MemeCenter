@@ -9,20 +9,10 @@ public class Filter implements BaseColumns {
     public static final String TABLE_NAME = "filter";
     public static final String FILTER_ID_COLUMN = "filterID";
     public static final String NAME_COLUMN = "name";
-    String name;
-    Set<String> filters;
+    private String name;
 
     public Filter(String name, Set<String> filters) {
         this.name = name;
-        this.filters = filters;
-    }
-
-    public Set<String> getFilters() {
-        return filters;
-    }
-
-    public void setFilters(Set<String> filters) {
-        this.filters = filters;
     }
 
     public String getName() {
@@ -31,9 +21,5 @@ public class Filter implements BaseColumns {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int size() {
-        return this.filters.size();
     }
 }
