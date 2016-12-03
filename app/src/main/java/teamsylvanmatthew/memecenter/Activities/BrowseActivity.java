@@ -61,7 +61,7 @@ public class BrowseActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         HomeFragment homeFragment = new HomeFragment();
-        fragmentManager.beginTransaction().add(R.id.fragmentLayout, homeFragment, "TAG_HOME").commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentLayout, homeFragment, "TAG_HOME").commit();
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -138,10 +138,7 @@ public class BrowseActivity extends AppCompatActivity {
             Fragment fragment = null;
             Class fragmentClass;
 
-            fragmentClass = LoadingFragment.class;
-
-            fragment = (Fragment) fragmentClass.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.fragmentLayout, fragment, "TAG_LOADING").commit();
+            addLoadingFragment();
 
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
@@ -215,6 +212,20 @@ public class BrowseActivity extends AppCompatActivity {
             Log.e(TAG, "Unable to remove loading fragment.");
             e.printStackTrace();
             return false;
+        }
+        return false;
+    }
+
+    public boolean addLoadingFragment() {
+        try {
+            Class fragmentClass = LoadingFragment.class;
+            Fragment fragment = (Fragment) fragmentClass.newInstance();
+
+            LoadingFragment loadingFragment = new LoadingFragment();
+            fragmentManager.beginTransaction().replace(R.id.fragmentLayout, fragment, "TAG_LOADING").commit();
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to add loading fragment.");
+            e.printStackTrace();
         }
         return false;
     }
