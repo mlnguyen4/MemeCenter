@@ -9,10 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioButton;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.mb3364.http.RequestParams;
@@ -44,11 +42,8 @@ public class SearchFragment extends Fragment {
     private ArrayList<Game> gameList;
     private ListView searchListView;
     private ListView gameListView;
-    private Button searchButton;
+    private SearchView searchView;
     private String query;
-    private EditText searchEditText;
-    private RadioButton gamesRadioButton;
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_search, container, false);
@@ -62,24 +57,31 @@ public class SearchFragment extends Fragment {
             fragmentManager.beginTransaction().remove(loadingFragment).commit();
         }
 
-        searchButton = (Button) mView.findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        searchView = (SearchView) mView.findViewById(R.id.searchView);
+
+        //make sure it isn't an icon
+        searchView.setIconifiedByDefault(false);
+        //runs query every time text changes
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                searchEditText = (EditText) mView.findViewById(R.id.searchEditText);
-                query = searchEditText.getText().toString();
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-                gamesRadioButton = (RadioButton) mView.findViewById(R.id.gamesRadioButton);
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                query = newText;
 
-                //TODO: fill radio button case logic
-                if (gamesRadioButton.isChecked()) {
-                    setupGameList();
-                } else {
-                    setupStreamList();
-                }
+                //TODO: Fix bug with query backspace where listview still show results even though
+                //searchView is empty. Probably should check query length and clear both list views
+                setupGameList();
+                setupStreamList();
 
+
+                return true;
             }
         });
+
 
 
         return mView;
@@ -89,7 +91,7 @@ public class SearchFragment extends Fragment {
     private void setupStreamList() {
         streamList = new ArrayList<Stream>();
         mStreamAdapter = new StreamAdapter(mActivity, streamList);
-        searchListView = (ListView) mView.findViewById(R.id.search_listview);
+        searchListView = (ListView) mView.findViewById(R.id.searchStreamListview);
 
         updateStreamList();
 
@@ -159,7 +161,7 @@ public class SearchFragment extends Fragment {
         gameList = new ArrayList<Game>();
         mGameAdapter = new GameAdapter(mActivity, gameList);
 
-        gameListView = (ListView) mView.findViewById(R.id.search_listview);
+        gameListView = (ListView) mView.findViewById(R.id.searchGameListView);
 
         updateGameList();
         gameListView.setAdapter(mGameAdapter);

@@ -11,58 +11,44 @@
         android:padding="20dp">
 
 
-        <RadioGroup
+        <SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/channelsRadioButton"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/channelsRadioButton"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:text="Channels" />
+        </SearchView>
 
-            <RadioButton
-                android:id="@+id/gamesRadioButton"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:text="Games" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/searchEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="Search Text"
-                android:inputType="text" />
-
-            <Button
-                android:id="@+id/searchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Search" />
-
-        </LinearLayout>
         <TextView
-            android:id="@+id/searchDesc"
+            android:id="@+id/searchStreamLabelTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Leave the text field blank to filter only."
-            android:textSize="15dp" />
+            android:paddingTop="10dp"
+            android:text="Results for live Streams..."
+            android:textColor="#42A5F5"
+            android:textSize="20dp"
+            android:textStyle="italic" />
 
         <ListView
-            android:id="@+id/search_listview"
+            android:id="@+id/searchStreamListview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/searchGameLabelTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="Results for live Games..."
+            android:textColor="#42A5F5"
+            android:textSize="20dp"
+            android:textStyle="italic" />
+
+        <ListView
+            android:id="@+id/searchGameListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></ListView>
 
     </LinearLayout>
 
