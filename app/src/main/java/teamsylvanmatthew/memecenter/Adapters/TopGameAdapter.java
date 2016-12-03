@@ -45,7 +45,7 @@ public class TopGameAdapter extends ArrayAdapter<TopGame> {
         }
 
 
-        viewHolder.tv_name.setText("Name: " + game.getName());
+        viewHolder.tv_name.setText(game.getName());
         viewHolder.tv_viewers.setText("Viewers: " + String.valueOf(topGame.getViewers()));
 
 

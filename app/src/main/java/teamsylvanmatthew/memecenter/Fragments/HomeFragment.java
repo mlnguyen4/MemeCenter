@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView streamListView;
     private RecyclerView topGameListView;
     private RecyclerView featuredStreamListView;
+    private FragmentManager fragmentManager;
 
 
     @Override
@@ -102,7 +103,7 @@ public class HomeFragment extends Fragment {
         mFeaturedStreamAdapter = new HomeStreamAdapter(this.getContext(), featuredStreamList);
         mTopGameAdapter = new HomeTopGameAdapter(this.getContext(), topGameList);
 
-        addToAllListList();
+        addToAllList();
 
         streamListView.setLayoutManager(new GridLayoutManager(this.getContext(), 1, GridLayoutManager.HORIZONTAL, false));
         streamListView.setAdapter(mStreamAdapter);
@@ -146,8 +147,16 @@ public class HomeFragment extends Fragment {
                 new RecyclerItemClickListener(this.getContext(), topGameListView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        //TODO: replace with game intent
-                        Toast.makeText(mActivity, "Item " + position, Toast.LENGTH_SHORT).show();
+                        fragmentManager = getFragmentManager();
+                        StreamFragment streamFragment = new StreamFragment();
+
+                        Bundle args = new Bundle();
+                        TextView gameNameTextView = (TextView) view.findViewById(R.id.game_name);
+                        Toast.makeText(mActivity, gameNameTextView.getText().toString(), Toast.LENGTH_SHORT).show();
+                        args.putString("GameName", gameNameTextView.getText().toString());
+                        streamFragment.setArguments(args);
+
+                        browseActivity.fragmentManager.beginTransaction().replace(R.id.fragmentLayout, streamFragment).commit();
                     }
 
                     @Override
@@ -161,7 +170,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void addToAllListList() {
+    private void addToAllList() {
         RequestParams params = new RequestParams();
         params.put("limit", limit);
 

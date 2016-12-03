@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mb3364.http.RequestParams;
@@ -33,6 +35,8 @@ public class GameFragment extends Fragment {
     private ArrayList<TopGame> gameList;
     private TopGameAdapter mGameAdapter;
     private ListView gameListView;
+    private FragmentManager fragmentManager;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,7 +127,26 @@ public class GameFragment extends Fragment {
     private class GameItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(mActivity, "Item " + position, Toast.LENGTH_SHORT).show();
+
+            try {
+                fragmentManager = getFragmentManager();
+                StreamFragment streamFragment = new StreamFragment();
+
+                Bundle args = new Bundle();
+                TextView gameNameTextView = (TextView) view.findViewById(R.id.game_name);
+                Toast.makeText(mActivity, gameNameTextView.getText().toString(), Toast.LENGTH_SHORT).show();
+                args.putString("GameName", gameNameTextView.getText().toString());
+                streamFragment.setArguments(args);
+
+                browseActivity.fragmentManager.beginTransaction().replace(R.id.fragmentLayout, streamFragment).commit();
+
+
+            } catch (Exception e) {
+                Log.e("GameFrag", "Game item click listener didn't load fragments properly.");
+            }
+
+
+
 
         }
     }

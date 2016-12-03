@@ -48,7 +48,7 @@ public class SearchFragment extends Fragment {
     private String query;
     private EditText searchEditText;
     private RadioButton gamesRadioButton;
-    private RadioButton channelsRadioButton;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_search, container, false);
@@ -117,6 +117,8 @@ public class SearchFragment extends Fragment {
         RequestParams params = new RequestParams();
         params.put("limit", limit);
         params.put("offset", offset);
+
+
         offset += 25;
 
         StreamsResponseHandler streamsResponseHandler = new StreamsResponseHandler() {

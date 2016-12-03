@@ -28,12 +28,14 @@ import teamsylvanmatthew.memecenter.R;
 public class StreamFragment extends Fragment {
     private static int limit = 25;
     private static int offset = 0;
+    Bundle bundle;
     private BrowseActivity browseActivity;
     private Activity mActivity;
     private View mView;
     private StreamAdapter mStreamAdapter;
     private ArrayList<Stream> streamList;
     private ListView streamListView;
+    private String gameName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +80,16 @@ public class StreamFragment extends Fragment {
         RequestParams params = new RequestParams();
         params.put("limit", limit);
         params.put("offset", offset);
+
+
+        bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.containsKey("GameName")) {
+                gameName = getArguments().getString("GameName");
+                params.put("game", gameName);
+            }
+        }
+
         offset += 25;
 
         StreamsResponseHandler streamsResponseHandler = new StreamsResponseHandler() {
