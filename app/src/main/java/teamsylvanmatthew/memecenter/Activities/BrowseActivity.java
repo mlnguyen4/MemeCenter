@@ -12,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -200,5 +201,21 @@ public class BrowseActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public boolean removeLoadingFragment() {
+        try {
+            Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
+
+            if (loadingFragment != null) {
+                fragmentManager.beginTransaction().remove(loadingFragment).commit();
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to remove loading fragment.");
+            e.printStackTrace();
+            return false;
+        }
+        return false;
     }
 }
