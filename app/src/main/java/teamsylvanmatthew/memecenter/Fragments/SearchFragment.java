@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mb3364.http.RequestParams;
@@ -76,7 +79,6 @@ public class SearchFragment extends Fragment {
                 //searchView is empty. Probably should check query length and clear both list views
                 setupGameList();
                 setupStreamList();
-
 
                 return true;
             }
@@ -241,7 +243,20 @@ public class SearchFragment extends Fragment {
     private class GameItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(mActivity, "Item " + position, Toast.LENGTH_SHORT).show();
+            Menu menu = browseActivity.navigationView.getMenu();
+            MenuItem menuItem = menu.getItem(2);
+            menuItem.setChecked(true);
+            getActivity().setTitle(menuItem.getTitle());
+
+            StreamFragment streamFragment = new StreamFragment();
+
+            Bundle args = new Bundle();
+            TextView gameNameTextView = (TextView) view.findViewById(R.id.game_name);
+            Toast.makeText(mActivity, gameNameTextView.getText().toString(), Toast.LENGTH_SHORT).show();
+            args.putString("GameName", gameNameTextView.getText().toString());
+            streamFragment.setArguments(args);
+
+            browseActivity.fragmentManager.beginTransaction().replace(R.id.fragmentLayout, streamFragment).commit();
 
         }
     }
