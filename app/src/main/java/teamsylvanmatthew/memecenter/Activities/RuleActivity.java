@@ -18,7 +18,7 @@ import java.util.Set;
 
 import teamsylvanmatthew.memecenter.R;
 
-public class FilterActivity extends AppCompatActivity {
+public class RuleActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
     EditText filterEditText;
     private SharedPreferences sharedPreferences;
@@ -27,7 +27,7 @@ public class FilterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter);
+        setContentView(R.layout.activity_rule);
 
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);

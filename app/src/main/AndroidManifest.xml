@@ -32,7 +32,7 @@
                 android:value=".Activities.BrowseActivity" />
         </activity>
         <activity
-            android:name=".Activities.FilterActivity"
+            android:name=".Activities.RuleActivity"
             android:parentActivityName=".Activities.ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
