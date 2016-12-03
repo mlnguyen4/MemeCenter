@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,7 +37,6 @@ public class GameFragment extends Fragment {
     private ArrayList<TopGame> gameList;
     private TopGameAdapter mGameAdapter;
     private ListView gameListView;
-    private FragmentManager fragmentManager;
 
 
     @Override
@@ -129,7 +130,11 @@ public class GameFragment extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             try {
-                fragmentManager = getFragmentManager();
+                Menu menu = browseActivity.navigationView.getMenu();
+                MenuItem menuItem = menu.getItem(2);
+                menuItem.setChecked(true);
+                getActivity().setTitle(menuItem.getTitle());
+
                 StreamFragment streamFragment = new StreamFragment();
 
                 Bundle args = new Bundle();
@@ -139,7 +144,6 @@ public class GameFragment extends Fragment {
                 streamFragment.setArguments(args);
 
                 browseActivity.fragmentManager.beginTransaction().replace(R.id.fragmentLayout, streamFragment).commit();
-
 
             } catch (Exception e) {
                 Log.e("GameFrag", "Game item click listener didn't load fragments properly.");
