@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,13 +92,7 @@ public class FollowingFragment extends Fragment {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mStreamAdapter.notifyDataSetChanged();
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-                        if (loadingFragment != null) {
-                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-                        }
+                        browseActivity.removeLoadingFragment();
                     }
                 });
             }

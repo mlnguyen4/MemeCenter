@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,13 +51,7 @@ public class SearchFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_search, container, false);
         mActivity = getActivity();
         browseActivity = (BrowseActivity) getActivity();
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-
-        if (loadingFragment != null) {
-            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-        }
+        browseActivity.removeLoadingFragment();
 
         searchView = (SearchView) mView.findViewById(R.id.searchView);
 
@@ -202,13 +195,6 @@ public class SearchFragment extends Fragment {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mGameAdapter.notifyDataSetChanged();
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-                        if (loadingFragment != null) {
-                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-                        }
                     }
                 });
             }

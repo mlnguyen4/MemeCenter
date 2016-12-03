@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,13 +59,8 @@ public class HomeFragment extends Fragment {
         mActivity = getActivity();
 
         /* Remove Loading when Layout is ready */
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-        if (loadingFragment != null) {
-            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-        }
         browseActivity = (BrowseActivity) getActivity();
+        browseActivity.removeLoadingFragment();
         streamListView = (RecyclerView) mView.findViewById(R.id.homeTopStreamsRecyclerView);
         featuredStreamListView = (RecyclerView) mView.findViewById(R.id.homeFeaturedStreamsRecyclerView);
         topGameListView = (RecyclerView) mView.findViewById(R.id.homeTopGamesRecyclerView);

@@ -4,7 +4,6 @@ package teamsylvanmatthew.memecenter.Fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -96,13 +95,7 @@ public class GameFragment extends Fragment {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mGameAdapter.notifyDataSetChanged();
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        Fragment loadingFragment = fragmentManager.findFragmentByTag("TAG_LOADING");
-
-                        if (loadingFragment != null) {
-                            fragmentManager.beginTransaction().remove(loadingFragment).commit();
-                        }
+                        browseActivity.removeLoadingFragment();
                     }
                 });
             }
