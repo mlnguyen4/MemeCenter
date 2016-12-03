@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -50,7 +52,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView streamListView;
     private RecyclerView topGameListView;
     private RecyclerView featuredStreamListView;
-    private FragmentManager fragmentManager;
 
 
     @Override
@@ -147,7 +148,12 @@ public class HomeFragment extends Fragment {
                 new RecyclerItemClickListener(this.getContext(), topGameListView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        fragmentManager = getFragmentManager();
+
+                        Menu menu = browseActivity.navigationView.getMenu();
+                        MenuItem menuItem = menu.getItem(2);
+                        menuItem.setChecked(true);
+                        getActivity().setTitle(menuItem.getTitle());
+
                         StreamFragment streamFragment = new StreamFragment();
 
                         Bundle args = new Bundle();
