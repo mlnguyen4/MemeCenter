@@ -1,7 +1,6 @@
 package teamsylvanmatthew.memecenter.Activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,11 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 import teamsylvanmatthew.memecenter.Database.MemeCenterDataSource;
 import teamsylvanmatthew.memecenter.Models.Filter;
+import teamsylvanmatthew.memecenter.Models.Rule;
 import teamsylvanmatthew.memecenter.R;
 
 public class RuleActivity extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class RuleActivity extends AppCompatActivity {
     private EditText filterNameEditText;
     private SharedPreferences sharedPreferences;
     private Set<String> filterList;
+    private Button saveButton;
     private long id;
     private String name;
 
@@ -40,7 +44,9 @@ public class RuleActivity extends AppCompatActivity {
         dataSource.open();
 
         filterNameEditText = (EditText) findViewById(R.id.filterNameEditText);
-        Button saveButton = (Button) findViewById(R.id.add_save_rule);
+        filterEditText = (EditText) findViewById(R.id.filterListEditText);
+
+        saveButton = (Button) findViewById(R.id.add_save_rule);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,58 +64,76 @@ public class RuleActivity extends AppCompatActivity {
 
         if (id == -1 || name == null) {
             setTitle("Add New Filter");
-
             return;
         } else {
-            setTitle("Rules for \"" + name + "\"");
-
             populateFields();
-
-            saveButton.setText("Save Changes");
-            filterNameEditText.setText(name);
         }
+
 
 
 
     }
 
     public boolean saveChanges() {
-        String name = filterNameEditText.getText().toString();
+        String newName = filterNameEditText.getText().toString();
 
-        if (name.equals("")) {
+        if (newName.equals("")) {
             return false;
-        } else {
-            Filter newFilter = new Filter(name);
-            long id = dataSource.addFilter(newFilter);
-/*
+        }
+        //TODO: check if newName already exists
+
+        if (id != -1 && name != null) {
+            /* update */
+            long currentId = dataSource.getFilterId(name);
+            //TODO: remove this delete rules and to be more accurate.
+            dataSource.deleteRules(currentId);
+            dataSource.updateFilter(name, newName);
+
+
             String lines = filterEditText.getText().toString();
             ArrayList<String> listOfText = new ArrayList<String>(Arrays.asList(lines.split("\n")));
 
+            Rule newRule;
             for( String line : listOfText ) {
-                dataSource.addRule();
+                newRule = new Rule(currentId, line);
+                dataSource.addRule(newRule);
             }
-            */
+            Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+            return true;
+
+        } else {
+            /* insert */
+            Filter newFilter = new Filter(newName);
+            long id = dataSource.addFilter(newFilter);
+
+            String lines = filterEditText.getText().toString();
+            ArrayList<String> listOfText = new ArrayList<String>(Arrays.asList(lines.split("\n")));
+
+
+            Rule newRule;
+            for (String line : listOfText) {
+                newRule = new Rule(id, line);
+                dataSource.addRule(newRule);
+            }
+
+            Toast.makeText(this, "Inserted", Toast.LENGTH_SHORT).show();
             return true;
         }
     }
 
     public void populateFields() {
+        setTitle("Rules for \"" + name + "\"");
+        saveButton.setText("Save Changes");
+        filterNameEditText.setText(name);
 
         TextView create = (TextView) findViewById(R.id.textView1);
         create.setText("Edit Filter");
 
-        filterEditText = (EditText) findViewById(R.id.filterListEditText);
-
-        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
-
-        filterList = sharedPreferences.getStringSet("filterList", null);
-        if (filterList != null) {
-            String textToFillEditText = "";
-            for (String aString : filterList) {
-                textToFillEditText += aString + "\n";
-            }
-
-            filterEditText.setText(textToFillEditText);
+        if (id != -1) {
+            ArrayList<String> rules = dataSource.getRules(id);
+            filterEditText.setText(android.text.TextUtils.join("\n", rules));
+        } else {
+            filterEditText.setText("");
         }
     }
 

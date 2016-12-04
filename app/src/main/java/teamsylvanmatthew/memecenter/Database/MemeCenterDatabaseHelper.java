@@ -14,7 +14,7 @@ public class MemeCenterDatabaseHelper extends SQLiteOpenHelper {
 
     /* CREATE TABLE */
     private static final String CREATE_TABLE_FILTER = "CREATE TABLE \"" + Filter.TABLE_NAME + "\" (" + "`" + Filter.FILTER_ID_COLUMN
-            + "` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + "`" + Filter.NAME_COLUMN + "` TEXT NOT NULL" + ");";
+            + "` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + "`" + Filter.NAME_COLUMN + "` TEXT NOT NULL UNIQUE" + ");";
 
     private static final String CREATE_TABLE_RULE = "CREATE TABLE \"" + Rule.TABLE_NAME + "\" (" + "`" + Rule.RULE_ID_COLUMN
             + "` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + "`" + Rule.FILTER_ID_FK_COLUMN + "` INTEGER NOT NULL," + "`" + Rule.REGEX_COLUMN + "` TEXT NOT NULL" + ");";
