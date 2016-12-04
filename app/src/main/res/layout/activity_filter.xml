@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_filter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="0dp"
+    android:orientation="vertical"
     tools:context="teamsylvanmatthew.memecenter.Activities.FilterActivity">
+
+    <TextView
+        android:id="@+id/instructions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:padding="5dp"
+        android:paddingRight="30dp"
+        android:text="Check filters to apply them to the chat."
+        android:textColor="@color/black" />
+
 
     <ListView
         android:id="@+id/filterList"
@@ -38,4 +49,4 @@
             android:text="Add Filter " />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
