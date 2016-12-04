@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class GameFragment extends Fragment {
     private View mView;
     private ArrayList<TopGame> gameList;
     private TopGameAdapter mGameAdapter;
-    private ListView gameListView;
+    private GridView gameListView;
 
 
     @Override
@@ -43,7 +44,7 @@ public class GameFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_game, container, false);
         mActivity = getActivity();
         browseActivity = (BrowseActivity) getActivity();
-        gameListView = (ListView) mView.findViewById(R.id.game_listview);
+        gameListView = (GridView) mView.findViewById(R.id.game_gridview);
 
         setupGameList();
 

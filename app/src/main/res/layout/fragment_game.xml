@@ -5,10 +5,15 @@
     tools:context="teamsylvanmatthew.memecenter.Fragments.LoadingFragment">
 
 
-    <ListView
-        android:id="@+id/game_listview"
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/game_gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:gravity="start"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp" />
 
     <include layout="@layout/item_notification" />
 
