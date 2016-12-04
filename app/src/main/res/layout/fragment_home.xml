@@ -38,7 +38,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/homeFeaturedStreamsRecyclerView"
-            android:layout_width="300dp"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:scrollbars="horizontal">
         </android.support.v7.widget.RecyclerView>
@@ -54,7 +54,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/homeTopGamesRecyclerView"
-            android:layout_width="300dp"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:scrollbars="horizontal" />
 
@@ -86,7 +86,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/homeTopStreamsRecyclerView"
-            android:layout_width="300dp"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="horizontal" />

@@ -3,8 +3,6 @@ package teamsylvanmatthew.memecenter.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +16,6 @@ import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.R;
 import teamsylvanmatthew.memecenter.Tasks.GetImageTask;
-
-import static android.text.Html.FROM_HTML_MODE_COMPACT;
 
 
 public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.ViewHolder> {
@@ -54,10 +50,9 @@ public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.Vi
 
         String preview = stream.getPreview().getMedium();
 
-        Spanned text = Html.fromHtml(String.valueOf(stream.getViewers()) + " watching " + "<b>" + channel.getName() + "</b>", FROM_HTML_MODE_COMPACT);
 
         new GetImageTask(viewHolder.tv_preview).execute(preview);
-        viewHolder.tv_name.setText(text);
+        viewHolder.tv_name.setText(String.valueOf(stream.getViewers()) + " watching " + channel.getName());
         viewHolder.tv_game.setText(stream.getGame());
         viewHolder.tv_title.setText(channel.getStatus());
 
