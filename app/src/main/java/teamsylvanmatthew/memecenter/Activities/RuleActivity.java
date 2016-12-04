@@ -1,12 +1,13 @@
 package teamsylvanmatthew.memecenter.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,24 +20,35 @@ import java.util.Set;
 import teamsylvanmatthew.memecenter.R;
 
 public class RuleActivity extends AppCompatActivity {
-    FloatingActionButton floatingActionButton;
+
     EditText filterEditText;
     private SharedPreferences sharedPreferences;
     private Set<String> filterList;
+    private long id;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rule);
 
+        Intent intent = getIntent();
+        id = intent.getLongExtra("id", -1);
+        name = intent.getStringExtra("name");
 
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        if (id == -1 || name == null) {
+            Toast.makeText(this, "Invalid Filter.", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            setTitle("Rules for \"" + name + "\"");
+        }
+
+
+        Button saveButton = (Button) findViewById(R.id.add_save_rule);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveFilterList();
-
-                //TODO: Redirect user from Filter screen to where ever Sylvan wants
             }
         });
 

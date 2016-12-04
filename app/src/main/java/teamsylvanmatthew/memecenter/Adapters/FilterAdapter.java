@@ -72,6 +72,8 @@ public class FilterAdapter extends ArrayAdapter<Filter> {
                                     Toast.makeText(mContext, "Edit " + position, Toast.LENGTH_SHORT).show();
 
                                     Intent ruleIntent = new Intent(mContext, RuleActivity.class);
+                                    ruleIntent.putExtra("id", filter.getId());
+                                    ruleIntent.putExtra("name", filter.getName());
                                     mContext.startActivity(ruleIntent);
 
                                     break;
