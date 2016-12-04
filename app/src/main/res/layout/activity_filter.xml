@@ -11,9 +11,30 @@
         android:id="@+id/filterList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:choiceMode="singleChoice" />
-    
+        android:layout_above="@+id/bottom_buttons"
+        android:layout_weight="1"
+        android:choiceMode="multipleChoice" />
+
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/edit_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Edit Selected" />
+
+        <Button
+            android:id="@+id/add_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add New Filter" />
+    </LinearLayout>
+
 </RelativeLayout>
