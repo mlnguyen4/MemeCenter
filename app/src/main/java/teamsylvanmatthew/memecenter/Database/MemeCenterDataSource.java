@@ -79,4 +79,14 @@ public class MemeCenterDataSource {
 
         return false;
     }
+
+    public boolean deleteFilter(final int filterid) {
+        final String DELETE_FILTER = "DELETE FROM " + Filter.TABLE_NAME + " WHERE " + Filter.FILTER_ID_COLUMN + " = " + filterid + ";";
+        final String DELETE_RULES = "DELETE FROM " + Rule.TABLE_NAME + " WHERE " + Rule.FILTER_ID_FK_COLUMN + " = " + filterid + ";";
+
+        database.execSQL(DELETE_FILTER);
+        database.execSQL(DELETE_RULES);
+
+        return true;
+    }
 }
