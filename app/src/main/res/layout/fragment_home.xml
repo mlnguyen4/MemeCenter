@@ -67,12 +67,12 @@
                 android:id="@+id/homeToTopGamesTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:clickable="true"
                 android:gravity="right"
                 android:onClick="onClick"
                 android:text="See all live games >>"
-                android:textColor="#2D9DC8" />
+                android:textColor="#2D9DC8"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <TextView
@@ -100,12 +100,12 @@
                 android:id="@+id/homeToTopStreamsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:clickable="true"
                 android:gravity="right"
                 android:onClick="onClick"
                 android:text="See all live Channels >>"
-                android:textColor="#2D9DC8" />
+                android:textColor="#2D9DC8"
+                android:textSize="12dp" />
         </LinearLayout>
     </LinearLayout>
 

@@ -3,6 +3,8 @@ package teamsylvanmatthew.memecenter.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ import com.mb3364.twitch.api.models.Stream;
 import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.R;
-import teamsylvanmatthew.memecenter.Tasks.getImageTask;
+import teamsylvanmatthew.memecenter.Tasks.GetImageTask;
+
+import static android.text.Html.FROM_HTML_MODE_COMPACT;
 
 
 public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.ViewHolder> {
@@ -50,11 +54,12 @@ public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.Vi
 
         String preview = stream.getPreview().getMedium();
 
-        new getImageTask(viewHolder.tv_preview).execute(preview);
-        viewHolder.tv_name.setText("Name: " + channel.getName());
-        viewHolder.tv_game.setText("Game: " + stream.getGame());
-        viewHolder.tv_viewers.setText("Viewers: " + String.valueOf(stream.getViewers()));
-        viewHolder.tv_title.setText("Title: " + channel.getStatus());
+        Spanned text = Html.fromHtml(String.valueOf(stream.getViewers()) + " watching " + "<b>" + channel.getName() + "</b>", FROM_HTML_MODE_COMPACT);
+
+        new GetImageTask(viewHolder.tv_preview).execute(preview);
+        viewHolder.tv_name.setText(text);
+        viewHolder.tv_game.setText(stream.getGame());
+        viewHolder.tv_title.setText(channel.getStatus());
 
     }
 
@@ -72,7 +77,6 @@ public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.Vi
         ImageView tv_preview;
         TextView tv_name;
         TextView tv_game;
-        TextView tv_viewers;
         TextView tv_title;
 
         public ViewHolder(View v) {
@@ -80,7 +84,6 @@ public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.Vi
             tv_preview = (ImageView) v.findViewById(R.id.streamPreviewImageView);
             tv_name = (TextView) v.findViewById(R.id.streamer_name);
             tv_game = (TextView) v.findViewById(R.id.stream_game);
-            tv_viewers = (TextView) v.findViewById(R.id.stream_viewers);
             tv_title = (TextView) v.findViewById(R.id.stream_title);
         }
     }

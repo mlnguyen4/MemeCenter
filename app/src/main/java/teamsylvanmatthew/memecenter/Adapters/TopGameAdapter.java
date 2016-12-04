@@ -14,7 +14,7 @@ import com.mb3364.twitch.api.models.TopGame;
 import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.R;
-import teamsylvanmatthew.memecenter.Tasks.getImageTask;
+import teamsylvanmatthew.memecenter.Tasks.GetImageTask;
 
 public class TopGameAdapter extends ArrayAdapter<TopGame> {
     private Activity mContext;
@@ -49,7 +49,7 @@ public class TopGameAdapter extends ArrayAdapter<TopGame> {
 
         String logo = game.getBox().getLarge();
 
-        new getImageTask(viewHolder.tv_logo).execute(logo);
+        new GetImageTask(viewHolder.tv_logo).execute(logo);
         viewHolder.tv_name.setText(game.getName());
         viewHolder.tv_viewers.setText("Viewers: " + String.valueOf(topGame.getViewers()));
 
