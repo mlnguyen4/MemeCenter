@@ -1,27 +1,37 @@
 package teamsylvanmatthew.memecenter.Models;
 
-import java.util.Set;
+import android.provider.BaseColumns;
 
-/**
- * Created by Ling on 11/30/2016.
- */
 
-public class Filter {
-    Set<String> filters;
+public class Filter implements BaseColumns {
+    public static final String TABLE_NAME = "filter";
+    public static final String FILTER_ID_COLUMN = "filterID";
+    public static final String NAME_COLUMN = "name";
+    private long id;
+    private String name;
 
-    public Filter(Set<String> filters) {
-        this.filters = filters;
+    public Filter(String name) {
+        this.name = name;
     }
 
-    public Set<String> getFilters() {
-        return filters;
+    public Filter(long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public void setFilters(Set<String> filters) {
-        this.filters = filters;
+    public long getId() {
+        return id;
     }
 
-    public int size() {
-        return this.filters.size();
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,96 +1,104 @@
 package teamsylvanmatthew.memecenter.Activities;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import teamsylvanmatthew.memecenter.Adapters.FilterAdapter;
+import teamsylvanmatthew.memecenter.Database.MemeCenterDataSource;
+import teamsylvanmatthew.memecenter.Models.Filter;
 import teamsylvanmatthew.memecenter.R;
 
 public class FilterActivity extends AppCompatActivity {
-    FloatingActionButton floatingActionButton;
-    EditText filterEditText;
+    private static final String TAG = "FilterActivity";
     private SharedPreferences sharedPreferences;
-    private Set<String> filterList;
+    private MemeCenterDataSource dataSource;
+    private FilterAdapter filterAdapter;
+    private ArrayList<Filter> filters;
+    private ListView filterListView;
+    private Context mContext;
+    private Set<String> listOfChecked;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+        mContext = getApplicationContext();
 
+        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+        dataSource = new MemeCenterDataSource(this);
+        dataSource.open();
 
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        listOfChecked = new HashSet<String>();
+        listOfChecked = sharedPreferences.getStringSet("filterList", null);
+
+        filters = dataSource.getAllFilters();
+        filterAdapter = new FilterAdapter(this, listOfChecked, filters);
+
+        filterListView = (ListView) findViewById(R.id.filterList);
+        filterListView.setAdapter(filterAdapter);
+
+        Button btn_save_sel = (Button) findViewById(R.id.save_selection);
+        Button btn_add = (Button) findViewById(R.id.add_filter);
+
+        btn_save_sel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                saveFilterList();
-
-                //TODO: Redirect user from Filter screen to where ever Sylvan wants
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                listOfChecked = new HashSet<String>(filterAdapter.getSelectedItems());
+                editor.putStringSet("filterList", listOfChecked);
+                editor.commit();
             }
         });
 
-
-        populateEditTextField();
-
-
-    }
-
-    public void saveFilterList() {
-        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        //parser
-        filterEditText = (EditText) findViewById(R.id.filterListEditText);
-
-        String filterLinesOfText = filterEditText.getText().toString();
-        System.out.println("The Strings :" + filterLinesOfText);
-        String delimiter = "\n";
-
-        List<String> listOfText = new ArrayList<String>(Arrays.asList(filterLinesOfText.split(delimiter)));
-
-
-        //saving preferences
-        filterList = new HashSet<String>(listOfText);
-        editor.putStringSet("filterList", filterList);
-        editor.commit();
-
-
-        //Toast feedback
-        Context context = getApplicationContext();
-        CharSequence text = "List of filters saved";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-    }
-
-    public void populateEditTextField() {
-
-        filterEditText = (EditText) findViewById(R.id.filterListEditText);
-
-        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
-
-        filterList = sharedPreferences.getStringSet("filterList", null);
-        if (filterList != null) {
-            String textToFillEditText = "";
-            for (String aString : filterList) {
-                textToFillEditText += aString + "\n";
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent ruleIntent = new Intent(mContext, RuleActivity.class);
+                startActivityForResult(ruleIntent, 1);
             }
+        });
 
-            filterEditText.setText(textToFillEditText);
+        //setSelection();
+    }
+
+    private void setSelection() {
+        HashSet<String> listOfChecked = new HashSet<String>();
+        sharedPreferences.getStringSet("filterList", listOfChecked);
+
+        for (String position : listOfChecked) {
+            filterListView.setItemChecked(Integer.parseInt(position), true);
         }
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    filters.clear();
+                    filters.addAll(dataSource.getAllFilters());
+                    filterAdapter.notifyDataSetChanged();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -102,4 +110,5 @@ public class FilterActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

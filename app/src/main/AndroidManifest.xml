@@ -32,6 +32,13 @@
                 android:value=".Activities.BrowseActivity" />
         </activity>
         <activity
+            android:name=".Activities.RuleActivity"
+            android:parentActivityName=".Activities.FilterActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.FilterActivity" />
+        </activity>
+        <activity
             android:name=".Activities.FilterActivity"
             android:parentActivityName=".Activities.ChatActivity">
             <meta-data
