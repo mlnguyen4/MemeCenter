@@ -31,7 +31,7 @@ public class MemeCenterDataSource {
     }
 
 
-    public ArrayList<String> getRules(int filterId) {
+    public ArrayList<String> getRules(long filterId) {
         ArrayList<String> rules = new ArrayList<String>();
 
         final String query = "SELECT " + Rule.REGEX_COLUMN + " FROM " + Filter.TABLE_NAME + " JOIN " + Rule.TABLE_NAME + " ON " + Filter.FILTER_ID_COLUMN + " = " + Rule.FILTER_ID_FK_COLUMN + " WHERE " + Filter.FILTER_ID_COLUMN + " = " + filterId + ";";
@@ -49,6 +49,18 @@ public class MemeCenterDataSource {
         Log.i(TAG, "query: " + query);
 
         return rules;
+    }
+
+    public boolean filterExists(String name) {
+        final String query = "SELECT * FROM " + Filter.TABLE_NAME + " WHERE " + Filter.NAME_COLUMN + " = \"" + name + "\";";
+
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return !cursor.isAfterLast();
     }
 
     public ArrayList<Filter> getAllFilters() {

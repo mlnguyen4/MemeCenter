@@ -1,5 +1,6 @@
 package teamsylvanmatthew.memecenter.Activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,19 +10,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import teamsylvanmatthew.memecenter.Database.MemeCenterDataSource;
+import teamsylvanmatthew.memecenter.Models.Filter;
 import teamsylvanmatthew.memecenter.R;
 
 public class RuleActivity extends AppCompatActivity {
-
-    EditText filterEditText;
+    private MemeCenterDataSource dataSource;
+    private EditText filterEditText;
+    private EditText filterNameEditText;
     private SharedPreferences sharedPreferences;
     private Set<String> filterList;
     private long id;
@@ -36,58 +36,67 @@ public class RuleActivity extends AppCompatActivity {
         id = intent.getLongExtra("id", -1);
         name = intent.getStringExtra("name");
 
-        if (id == -1 || name == null) {
-            Toast.makeText(this, "Invalid Filter.", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            setTitle("Rules for \"" + name + "\"");
-        }
+        dataSource = new MemeCenterDataSource(this);
+        dataSource.open();
 
-
+        filterNameEditText = (EditText) findViewById(R.id.filterNameEditText);
         Button saveButton = (Button) findViewById(R.id.add_save_rule);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveFilterList();
+                boolean check = saveChanges();
+
+                if (check) {
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
             }
         });
 
 
-        populateEditTextField();
+
+        if (id == -1 || name == null) {
+            setTitle("Add New Filter");
+
+            return;
+        } else {
+            setTitle("Rules for \"" + name + "\"");
+
+            populateFields();
+
+            saveButton.setText("Save Changes");
+            filterNameEditText.setText(name);
+        }
+
 
 
     }
 
-    public void saveFilterList() {
-        sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+    public boolean saveChanges() {
+        String name = filterNameEditText.getText().toString();
 
-        //parser
-        filterEditText = (EditText) findViewById(R.id.filterListEditText);
+        if (name.equals("")) {
+            return false;
+        } else {
+            Filter newFilter = new Filter(name);
+            long id = dataSource.addFilter(newFilter);
+/*
+            String lines = filterEditText.getText().toString();
+            ArrayList<String> listOfText = new ArrayList<String>(Arrays.asList(lines.split("\n")));
 
-        String filterLinesOfText = filterEditText.getText().toString();
-        System.out.println("The Strings :" + filterLinesOfText);
-        String delimiter = "\n";
-
-        List<String> listOfText = new ArrayList<String>(Arrays.asList(filterLinesOfText.split(delimiter)));
-
-
-        //saving preferences
-        filterList = new HashSet<String>(listOfText);
-        editor.putStringSet("filterList", filterList);
-        editor.commit();
-
-
-        //Toast feedback
-        Context context = getApplicationContext();
-        CharSequence text = "List of filters saved";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+            for( String line : listOfText ) {
+                dataSource.addRule();
+            }
+            */
+            return true;
+        }
     }
 
-    public void populateEditTextField() {
+    public void populateFields() {
+
+        TextView create = (TextView) findViewById(R.id.textView1);
+        create.setText("Edit Filter");
 
         filterEditText = (EditText) findViewById(R.id.filterListEditText);
 

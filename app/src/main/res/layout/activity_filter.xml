@@ -15,6 +15,7 @@
         android:layout_weight="1"
         android:choiceMode="multipleChoice" />
 
+
     <LinearLayout
         android:id="@+id/bottom_buttons"
         android:layout_width="match_parent"
@@ -23,18 +24,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/edit_filter"
-            android:layout_width="wrap_content"
+            android:id="@+id/save_selection"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Edit Selected" />
+            android:text="Save Selection" />
 
         <Button
             android:id="@+id/add_filter"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add New Filter" />
+            android:text="Add Filter " />
     </LinearLayout>
 
 </RelativeLayout>
