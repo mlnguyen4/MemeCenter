@@ -84,15 +84,25 @@ public class MemeCenterDataSource {
     }
 
     public long addFilter(Filter filter) {
+        Log.i(TAG, "addFilter: (" + filter.getId() + ", " + filter.getName() + ")");
+
         if (filter != null) {
             ContentValues currentValues = new ContentValues();
             currentValues.put(Filter.NAME_COLUMN, filter.getName());
             return database.insert(Filter.TABLE_NAME, null, currentValues);
         }
 
-        Log.i(TAG, "addFilter: (" + filter.getId() + ", " + filter.getName() + ")");
-
         return -1;
+    }
+
+    public void updateFilter(String oldName, String newName) {
+        Log.i(TAG, "updateFilter: (" + oldName + ")");
+        if (oldName != null) {
+            final String query = "UPDATE " + Filter.TABLE_NAME + " SET " + Filter.NAME_COLUMN + " = \"" + newName + "\" WHERE " + Filter.NAME_COLUMN + " = \"" + oldName + "\";";
+
+            Log.i(TAG, "query: " + query);
+            database.execSQL(query);
+        }
     }
 
     public boolean deleteFilter(Filter filter) {
@@ -107,5 +117,18 @@ public class MemeCenterDataSource {
 
 
         return true;
+    }
+
+    public long addRule(Rule rule) {
+        Log.i(TAG, "addRule: (" + rule.getRuleId() + ", " + rule.getFilter_fk_id() + ", " + rule.getRegex() + ")");
+
+        if (rule != null) {
+            ContentValues currentValues = new ContentValues();
+            currentValues.put(Rule.FILTER_ID_FK_COLUMN, rule.getFilter_fk_id());
+            currentValues.put(Rule.REGEX_COLUMN, rule.getRegex());
+            return database.insert(Rule.TABLE_NAME, null, currentValues);
+        }
+
+        return -1;
     }
 }
