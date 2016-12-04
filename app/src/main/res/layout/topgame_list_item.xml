@@ -20,6 +20,10 @@
         android:id="@+id/game_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textColor="#000000"
         android:textSize="10sp" />
 
@@ -27,6 +31,10 @@
         android:id="@+id/topgame_viewers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:paddingBottom="7dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textSize="10sp" />
 </LinearLayout>
