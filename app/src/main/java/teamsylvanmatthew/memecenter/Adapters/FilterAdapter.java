@@ -1,6 +1,7 @@
 package teamsylvanmatthew.memecenter.Adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,21 +14,23 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import teamsylvanmatthew.memecenter.Activities.RuleActivity;
+import teamsylvanmatthew.memecenter.Database.MemeCenterDataSource;
+import teamsylvanmatthew.memecenter.Models.Filter;
 import teamsylvanmatthew.memecenter.R;
 
-public class FilterAdapter extends ArrayAdapter<String> {
+public class FilterAdapter extends ArrayAdapter<Filter> {
+    private MemeCenterDataSource dataSource;
     private Activity mContext;
-    private int position;
 
-    public FilterAdapter(Activity context, ArrayList<String> items) {
+    public FilterAdapter(Activity context, ArrayList<Filter> items) {
         super(context, R.layout.item_filter, items);
         mContext = context;
     }
 
     @Override
-    public View getView(int posn, View convertView, ViewGroup parent) {
-        String name = getItem(posn);
-        position = posn;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        Filter filter = getItem(position);
 
         FilterAdapter.ViewHolder viewHolder;
 
@@ -46,37 +49,53 @@ public class FilterAdapter extends ArrayAdapter<String> {
         }
 
 
-        viewHolder.tv_name.setText(name);
+        viewHolder.tv_name.setText(filter.getName());
 
-        viewHolder.img_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(mContext, v);
-                popup.getMenuInflater().inflate(R.menu.filter_menu_view, popup.getMenu());
-                popup.show();
+        try {
+            dataSource = new MemeCenterDataSource(mContext);
+            dataSource.open();
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+            viewHolder.img_settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popup = new PopupMenu(mContext, v);
+                    popup.getMenuInflater().inflate(R.menu.filter_menu_view, popup.getMenu());
+                    popup.show();
 
-                        switch (item.getItemId()) {
-                            case R.id.edit:
-                                Toast.makeText(mContext, "Edit " + position, Toast.LENGTH_SHORT).show();
-                                break;
-                            case R.id.delete:
-                                Toast.makeText(mContext, "Delete " + position, Toast.LENGTH_SHORT).show();
-                                break;
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Filter filter = getItem(position);
 
-                            default:
-                                break;
+                            switch (item.getItemId()) {
+                                case R.id.edit:
+                                    Toast.makeText(mContext, "Edit " + position, Toast.LENGTH_SHORT).show();
+
+                                    Intent ruleIntent = new Intent(mContext, RuleActivity.class);
+                                    mContext.startActivity(ruleIntent);
+
+                                    break;
+                                case R.id.delete:
+                                    Toast.makeText(mContext, "Delete " + position, Toast.LENGTH_SHORT).show();
+
+                                    dataSource.deleteFilter(filter);
+                                    remove(filter);
+                                    notifyDataSetChanged();
+                                    break;
+
+                                default:
+                                    break;
+                            }
+
+                            return true;
                         }
+                    });
 
-                        return true;
-                    }
-                });
-
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         return convertView;
