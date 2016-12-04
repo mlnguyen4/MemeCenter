@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mb3364.twitch.api.models.Channel;
@@ -13,6 +14,7 @@ import com.mb3364.twitch.api.models.Stream;
 import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.R;
+import teamsylvanmatthew.memecenter.Tasks.getImageTask;
 
 
 public class StreamAdapter extends ArrayAdapter<Stream> {
@@ -36,6 +38,7 @@ public class StreamAdapter extends ArrayAdapter<Stream> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.stream_list_item, null);
 
+            viewHolder.tv_preview = (ImageView) convertView.findViewById(R.id.streamPreviewImageView);
             viewHolder.tv_name = (TextView) convertView.findViewById(R.id.streamer_name);
             viewHolder.tv_game = (TextView) convertView.findViewById(R.id.stream_game);
             viewHolder.tv_viewers = (TextView) convertView.findViewById(R.id.stream_viewers);
@@ -46,6 +49,9 @@ public class StreamAdapter extends ArrayAdapter<Stream> {
             viewHolder = (StreamAdapter.ViewHolder) convertView.getTag();
         }
 
+        String preview = stream.getPreview().getLarge();
+
+        new getImageTask(viewHolder.tv_preview).execute(preview);
         viewHolder.tv_name.setText("Name: " + channel.getName());
         viewHolder.tv_game.setText("Game: " + stream.getGame());
         viewHolder.tv_viewers.setText("Viewers: " + String.valueOf(stream.getViewers()));
@@ -56,6 +62,7 @@ public class StreamAdapter extends ArrayAdapter<Stream> {
 
 
     private static class ViewHolder {
+        ImageView tv_preview;
         TextView tv_name;
         TextView tv_game;
         TextView tv_viewers;
