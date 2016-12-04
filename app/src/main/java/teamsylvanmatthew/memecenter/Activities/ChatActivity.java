@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.pircbotx.Configuration;
@@ -183,7 +184,12 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getCredentials() {
         sharedPreferences = getSharedPreferences("memecenter", Context.MODE_PRIVATE);
+        LinearLayout composeLayout = (LinearLayout) findViewById(R.id.composeLayout);
+        LinearLayout pleaseLogin = (LinearLayout) findViewById(R.id.loginPlease);
+
         if (sharedPreferences.getInt("authenticated", 0) == 1) {
+            composeLayout.setVisibility(View.VISIBLE);
+            pleaseLogin.setVisibility(View.GONE);
             mCurrentUser = sharedPreferences.getString("username", "justinfan58503920594859");
             mOauth = sharedPreferences.getString("oauth", null);
         }
