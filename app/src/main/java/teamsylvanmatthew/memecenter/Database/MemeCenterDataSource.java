@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ import teamsylvanmatthew.memecenter.Models.Filter;
 import teamsylvanmatthew.memecenter.Models.Rule;
 
 public class MemeCenterDataSource {
+    private static final String TAG = "MemeCenterDataSource";
     private SQLiteDatabase database;
     private MemeCenterDatabaseHelper databaseHelper;
 
@@ -29,10 +31,10 @@ public class MemeCenterDataSource {
     }
 
 
-    public ArrayList<String> getRules(int id) {
+    public ArrayList<String> getRules(int filterId) {
         ArrayList<String> rules = new ArrayList<String>();
 
-        final String query = "SELECT " + Rule.REGEX_COLUMN + " FROM " + Filter.TABLE_NAME + " JOIN " + Rule.TABLE_NAME + " ON " + Filter.FILTER_ID_COLUMN + " = " + Rule.FILTER_ID_FK_COLUMN + " WHERE " + Filter.FILTER_ID_COLUMN + " = " + id + ";";
+        final String query = "SELECT " + Rule.REGEX_COLUMN + " FROM " + Filter.TABLE_NAME + " JOIN " + Rule.TABLE_NAME + " ON " + Filter.FILTER_ID_COLUMN + " = " + Rule.FILTER_ID_FK_COLUMN + " WHERE " + Filter.FILTER_ID_COLUMN + " = " + filterId + ";";
 
         Cursor cursor = database.rawQuery(query, null);
 
@@ -44,14 +46,15 @@ public class MemeCenterDataSource {
             rules.add(cursor.getString(0));
             cursor.moveToNext();
         }
+        Log.i(TAG, "query: " + query);
 
         return rules;
     }
 
-    public ArrayList<String> getFilters() {
-        ArrayList<String> filters = new ArrayList<String>();
+    public ArrayList<Filter> getAllFilters() {
+        ArrayList<Filter> filters = new ArrayList<Filter>();
 
-        final String query = "SELECT " + Filter.NAME_COLUMN + " FROM " + Filter.TABLE_NAME + ";";
+        final String query = "SELECT " + Filter.FILTER_ID_COLUMN + ", " + Filter.NAME_COLUMN + " FROM " + Filter.TABLE_NAME + ";";
 
         Cursor cursor = database.rawQuery(query, null);
 
@@ -60,32 +63,36 @@ public class MemeCenterDataSource {
         }
 
         while (!cursor.isAfterLast()) {
-            filters.add(cursor.getString(0));
+            filters.add(new Filter(cursor.getInt(0), cursor.getString(1)));
             cursor.moveToNext();
         }
+        Log.i(TAG, "query: " + query);
 
         return filters;
     }
 
-    public boolean addFilter(Filter filter) {
+    public long addFilter(Filter filter) {
         if (filter != null) {
             ContentValues currentValues = new ContentValues();
-
             currentValues.put(Filter.NAME_COLUMN, filter.getName());
-            database.insert(Filter.TABLE_NAME, null, currentValues);
-
-            return true;
+            return database.insert(Filter.TABLE_NAME, null, currentValues);
         }
 
-        return false;
+        Log.i(TAG, "addFilter: (" + filter.getId() + ", " + filter.getName() + ")");
+
+        return -1;
     }
 
-    public boolean deleteFilter(final int filterid) {
-        final String DELETE_FILTER = "DELETE FROM " + Filter.TABLE_NAME + " WHERE " + Filter.FILTER_ID_COLUMN + " = " + filterid + ";";
-        final String DELETE_RULES = "DELETE FROM " + Rule.TABLE_NAME + " WHERE " + Rule.FILTER_ID_FK_COLUMN + " = " + filterid + ";";
+    public boolean deleteFilter(Filter filter) {
+        final String DELETE_FILTER = "DELETE FROM " + Filter.TABLE_NAME + " WHERE " + Filter.FILTER_ID_COLUMN + " = " + filter.getId() + ";";
+        final String DELETE_RULES = "DELETE FROM " + Rule.TABLE_NAME + " WHERE " + Rule.FILTER_ID_FK_COLUMN + " = " + filter.getId() + ";";
 
         database.execSQL(DELETE_FILTER);
         database.execSQL(DELETE_RULES);
+
+        Log.i(TAG, "DELETE: " + DELETE_FILTER);
+        Log.i(TAG, "DELETE: " + DELETE_RULES);
+
 
         return true;
     }
