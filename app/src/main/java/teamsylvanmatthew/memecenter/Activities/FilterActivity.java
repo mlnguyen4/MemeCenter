@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -30,8 +28,6 @@ public class FilterActivity extends AppCompatActivity {
     private ArrayList<Filter> filters;
     private ListView filterListView;
     private Context mContext;
-    private AlertDialog.Builder alertDialogBuilder;
-    private EditText userInput;
     private Set<String> listOfChecked;
 
 

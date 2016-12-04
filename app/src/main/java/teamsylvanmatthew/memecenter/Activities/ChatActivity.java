@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import teamsylvanmatthew.memecenter.Adapters.MessageAdapter;
+import teamsylvanmatthew.memecenter.Database.MemeCenterDataSource;
 import teamsylvanmatthew.memecenter.Models.Message;
 import teamsylvanmatthew.memecenter.R;
 
@@ -33,6 +34,7 @@ public class ChatActivity extends AppCompatActivity {
     private String mCurrentUser = "justinfan58503920594859";
     private String mChannel;
     private String mOauth;
+    private MemeCenterDataSource dataSource;
     private ListView messageListView;
     private ArrayList<Message> messages;
     private ArrayList<Pattern> mFilterPatterns;
@@ -51,6 +53,8 @@ public class ChatActivity extends AppCompatActivity {
 
         getCredentials();
 
+        dataSource = new MemeCenterDataSource(this);
+        dataSource.open();
 
         messageListView = (ListView) findViewById(R.id.messageListView);
         messages = new ArrayList<Message>();
@@ -139,11 +143,19 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getRegex() {
         Set<String> filters = sharedPreferences.getStringSet("filterList", null);
-        mFilterPatterns = new ArrayList<Pattern>();
+        ArrayList<String> allRules = new ArrayList<String>();
 
         if (filters != null) {
             for (String filter : filters) {
-                mFilterPatterns.add(Pattern.compile(filter));
+                long currId = dataSource.getFilterId(filter);
+                allRules.addAll(dataSource.getRules(currId));
+            }
+
+            mFilterPatterns = new ArrayList<Pattern>();
+
+
+            for (String rule : allRules) {
+                mFilterPatterns.add(Pattern.compile(rule));
             }
         }
     }
