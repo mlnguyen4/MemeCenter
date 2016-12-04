@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mb3364.twitch.api.models.Channel;
@@ -49,11 +50,19 @@ public class StreamAdapter extends ArrayAdapter<Stream> {
         }
 
         String preview = stream.getPreview().getLarge();
-
         new GetImageTask(viewHolder.tv_preview).execute(preview);
+
+        //set the name of the viewers watching name string to bold
+
+
+
         viewHolder.tv_name.setText(String.valueOf(stream.getViewers()) + " watching " + channel.getName());
         viewHolder.tv_game.setText(stream.getGame());
         viewHolder.tv_title.setText(channel.getStatus());
+
+        viewHolder.tv_name.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        viewHolder.tv_game.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        viewHolder.tv_title.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         return convertView;
     }

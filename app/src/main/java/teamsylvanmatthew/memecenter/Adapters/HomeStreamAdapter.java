@@ -2,7 +2,10 @@ package teamsylvanmatthew.memecenter.Adapters;
 
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,8 @@ import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.R;
 import teamsylvanmatthew.memecenter.Tasks.GetImageTask;
+
+import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 
 
 public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.ViewHolder> {
@@ -52,9 +57,25 @@ public class HomeStreamAdapter extends RecyclerView.Adapter<HomeStreamAdapter.Vi
 
 
         new GetImageTask(viewHolder.tv_preview).execute(preview);
-        viewHolder.tv_name.setText(String.valueOf(stream.getViewers()) + " watching " + channel.getName());
+
+
+        //to make the name part of the string viewers watching name bold
+        String viewerAndName = String.valueOf(stream.getViewers()) + " watching " + channel.getName();
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(viewerAndName);
+        int boldStart = viewerAndName.indexOf(channel.getName());
+        int boldEnd = viewerAndName.length();
+        stringBuilder.setSpan(new StyleSpan(Typeface.BOLD), boldStart, boldEnd, SPAN_INCLUSIVE_INCLUSIVE);
+
+        viewHolder.tv_name.setText(stringBuilder);
         viewHolder.tv_game.setText(stream.getGame());
-        viewHolder.tv_title.setText(channel.getStatus());
+
+        //for when status is too long
+        String status = channel.getStatus();
+        if (status.length() > 40) {
+            status = status.substring(0, 37) + "...";
+        }
+
+        viewHolder.tv_title.setText(status);
 
     }
 
