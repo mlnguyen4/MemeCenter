@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mb3364.twitch.api.models.Game;
@@ -14,6 +15,7 @@ import com.mb3364.twitch.api.models.TopGame;
 import java.util.ArrayList;
 
 import teamsylvanmatthew.memecenter.R;
+import teamsylvanmatthew.memecenter.Tasks.getImageTask;
 
 
 public class HomeTopGameAdapter extends RecyclerView.Adapter<HomeTopGameAdapter.ViewHolder> {
@@ -32,6 +34,7 @@ public class HomeTopGameAdapter extends RecyclerView.Adapter<HomeTopGameAdapter.
 
         View view = inflater.inflate(R.layout.topgame_list_item, parent, false);
 
+
         ViewHolder viewHolder = new ViewHolder(view);
 
         return viewHolder;
@@ -44,7 +47,9 @@ public class HomeTopGameAdapter extends RecyclerView.Adapter<HomeTopGameAdapter.
         // - replace the contents of the view with that element
         TopGame topGame = topGames.get(position);
         Game game = topGame.getGame();
+        String logo = game.getBox().getLarge();
 
+        new getImageTask(viewHolder.tv_logo).execute(logo);
 
         viewHolder.tv_name.setText(game.getName());
         viewHolder.tv_viewers.setText("Viewers: " + String.valueOf(topGame.getViewers()));
@@ -62,11 +67,13 @@ public class HomeTopGameAdapter extends RecyclerView.Adapter<HomeTopGameAdapter.
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
+        ImageView tv_logo;
         TextView tv_name;
         TextView tv_viewers;
 
         public ViewHolder(View v) {
             super(v);
+            tv_logo = (ImageView) v.findViewById(R.id.gameLogoImageView);
             tv_name = (TextView) v.findViewById(R.id.game_name);
             tv_viewers = (TextView) v.findViewById(R.id.topgame_viewers);
         }
