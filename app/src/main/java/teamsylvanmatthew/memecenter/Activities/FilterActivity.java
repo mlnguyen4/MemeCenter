@@ -89,12 +89,9 @@ public class FilterActivity extends AppCompatActivity {
         if (requestCode == 1) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
-                    /*
                     filters.clear();
-                    filters = dataSource.getAllFilters();
+                    filters.addAll(dataSource.getAllFilters());
                     filterAdapter.notifyDataSetChanged();
-                    */
-                    //findViewById(R.id.activity_filter).invalidate();
                     break;
                 default:
                     break;
