@@ -4,7 +4,7 @@ Note: This application was made by Matthew Nugyen and Sylvan Mostert. It was par
 
 ## Introduction
 
-The Meme Center is a chat filter for a Twitch stream on the Android platform. The purpose of this application is to filter out all chat messages that is not a meme (Internet pop culture) or copy pastas (copied spam).
+The Meme Center is a chat filter for a Twitch stream on the Android platform. The end goal of this application is to filter out all chat messages that is not a meme (Internet pop culture) or copy pastas (copied spam).
 
 The end user of a Twitch chat application is looking for an unintrusive experience to view and participate in a full featured chat. Being unable to filter unwanted messages in a user’s chat creates an irritating and disappointing experience.
 
